@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro Raiders - Fase 2</title>
+
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a0d1a 50%,
+          #0d0d0d 100%
+        );
+        color: #f2f2f2;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Mesmo fundo de circuitos */
+      .circuit-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 120%;
+        height: 120%;
+        opacity: 0.06;
+        z-index: -1;
+        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='circuit-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff0077'/%3E%3Cstop offset='50%25' style='stop-color:%236600cc'/%3E%3Cstop offset='100%25' style='stop-color:%23ff0077'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg stroke='url(%23circuit-grad)' stroke-width='1' fill='none'%3E%3Cpath d='M20,20 L80,20 L80,60 L140,60 L140,100'/%3E%3Cpath d='M20,80 L60,80 L60,120 L120,120 L120,180'/%3E%3Cpath d='M180,20 L120,20 L120,40 L60,40 L60,80'/%3E%3Cpath d='M180,80 L140,80 L140,140 L80,140 L80,180'/%3E%3Cpath d='M20,160 L80,160 L80,120 L140,120'/%3E%3Cpath d='M160,160 L120,160 L120,100 L80,100'/%3E%3Cpath d='M180,140 L160,140 L160,180'/%3E%3Cpath d='M40,180 L40,140 L20,140'/%3E%3C/g%3E%3Cg fill='url(%23circuit-grad)'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='80' cy='20' r='2'/%3E%3Ccircle cx='80' cy='60' r='2'/%3E%3Ccircle cx='140' cy='60' r='2'/%3E%3Ccircle cx='140' cy='100' r='2'/%3E%3Ccircle cx='20' cy='80' r='2'/%3E%3Ccircle cx='60' cy='80' r='2'/%3E%3Ccircle cx='60' cy='120' r='2'/%3E%3Ccircle cx='120' cy='120' r='2'/%3E%3Ccircle cx='120' cy='180' r='2'/%3E%3Ccircle cx='180' cy='20' r='2'/%3E%3Ccircle cx='120' cy='20' r='2'/%3E%3Ccircle cx='120' cy='40' r='2'/%3E%3Ccircle cx='60' cy='40' r='2'/%3E%3Ccircle cx='180' cy='80' r='2'/%3E%3Ccircle cx='140' cy='80' r='2'/%3E%3Ccircle cx='140' cy='140' r='2'/%3E%3Ccircle cx='80' cy='140' r='2'/%3E%3Ccircle cx='80' cy='180' r='2'/%3E%3Ccircle cx='20' cy='160' r='2'/%3E%3Ccircle cx='80' cy='160' r='2'/%3E%3Ccircle cx='160' cy='160' r='2'/%3E%3Ccircle cx='120' cy='160' r='2'/%3E%3Ccircle cx='80' cy='100' r='2'/%3E%3Ccircle cx='180' cy='140' r='2'/%3E%3Ccircle cx='160' cy='140' r='2'/%3E%3Ccircle cx='160' cy='180' r='2'/%3E%3Ccircle cx='40' cy='180' r='2'/%3E%3Ccircle cx='40' cy='140' r='2'/%3E%3Ccircle cx='20' cy='140' r='2'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 400px 400px;
+        animation: circuit-flow 60s linear infinite;
+      }
+
+      @keyframes circuit-flow {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 0.06;
+        }
+        25% {
+          opacity: 0.08;
+        }
+        50% {
+          transform: translate(-100px, -100px) rotate(180deg);
+          opacity: 0.06;
+        }
+        75% {
+          opacity: 0.04;
+        }
+        100% {
+          transform: translate(0, 0) rotate(360deg);
+          opacity: 0.06;
+        }
+      }
+
+      /* Container principal */
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Header da fase */
+      .phase-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: fade-in-down 1s ease-out;
+      }
+
+      .logo {
+        font-family: "Orbitron", monospace;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #ff0077;
+        text-shadow: 0 0 20px rgba(255, 0, 119, 0.8);
+        margin-bottom: 0.5rem;
+      }
+
+      .phase-title {
+        font-size: 1.8rem;
+        color: #d8b4f8;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .phase-description {
+        font-size: 1rem;
+        color: #e0e0e0;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Card do jogo */
+      .game-card {
+        background: rgba(0, 0, 0, 0.85);
+        border: 3px solid #ff0077;
+        border-radius: 25px;
+        padding: 3rem;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 60px rgba(255, 0, 119, 0.4),
+          inset 0 0 60px rgba(255, 0, 119, 0.15);
+        animation: fade-in-up 1s ease-out 0.5s both;
+        position: relative;
+      }
+
+      /* Status do jogo */
+      .game-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 0, 119, 0.3);
+      }
+
+      .progress-info {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ff0077;
+      }
+
+      .score-info {
+        font-size: 1rem;
+        color: #d8b4f8;
+      }
+
+      /* Arena de batalha */
+      .battle-arena {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 2rem;
+        align-items: center;
+        margin-bottom: 0.6rem;
+        min-height: 200px;
+      }
+
+      .competitor {
+        text-align: center;
+        padding: 0.8rem 0;
+        background: rgba(255, 0, 119, 0.05);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        width: 25%;
+      }
+
+      .competitor.active {
+        background: rgba(255, 0, 119, 0.15);
+        box-shadow: 0 0 30px rgba(255, 0, 119, 0.3);
+        transform: scale(1.05);
+      }
+
+      .competitor-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+        filter: drop-shadow(0 0 10px rgba(255, 0, 119, 0.5));
+      }
+
+      .competitor-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #ff0077;
+        margin-bottom: 0.5rem;
+      }
+
+      .competitor-subtitle {
+        font-size: 0.8rem;
+        color: #d8b4f8;
+        font-style: italic;
+      }
+
+      .vs-divider {
+        font-size: 1rem;
+        color: #ff0077;
+        font-weight: 900;
+        text-shadow: 0 0 20px rgba(255, 0, 119, 0.8);
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+      }
+
+      /* Card da característica atual */
+      .current-characteristic {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border: 3px solid #ff0077;
+        border-radius: 20px;
+        padding: 2.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: slide-in 0.5s ease-out;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .current-characteristic::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 0, 119, 0.1),
+          transparent
+        );
+        animation: shine 3s ease-in-out infinite;
+      }
+
+      @keyframes shine {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      .characteristic-text {
+        font-size: 1.3rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+        font-weight: 500;
+        position: relative;
+        z-index: 1;
+      }
+
+      .question-prompt {
+        font-size: 1.1rem;
+        color: #ff0077;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+      }
+
+      /* Botões de escolha */
+      .choice-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      .choice-btn {
+        padding: 1.5rem 2rem;
+        border: 3px solid;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .choice-btn.human {
+        background: linear-gradient(145deg, #1a0d1a, #2a1d2a);
+        border-color: #ff0077;
+        color: #ff0077;
+      }
+
+      .choice-btn.computer {
+        background: linear-gradient(145deg, #0d1a1a, #1d2a2a);
+        border-color: #00cccc;
+        color: #00cccc;
+      }
+
+      .choice-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 0, 119, 0.3);
+      }
+
+      .choice-btn.human:hover {
+        background: linear-gradient(145deg, #2a1d2a, #3a2d3a);
+        box-shadow: 0 8px 25px rgba(255, 0, 119, 0.4);
+      }
+
+      .choice-btn.computer:hover {
+        background: linear-gradient(145deg, #1d2a2a, #2d3a3a);
+        box-shadow: 0 8px 25px rgba(0, 204, 204, 0.4);
+      }
+
+      .choice-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .choice-btn:hover::before {
+        left: 100%;
+      }
+
+      /* Feedback da resposta */
+      .answer-feedback {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.95);
+        border: 3px solid;
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        z-index: 1000;
+        min-width: 300px;
+        backdrop-filter: blur(15px);
+        display: none;
+        animation: pop-in 0.5s ease-out;
+      }
+
+      .answer-feedback.correct {
+        border-color: #4caf50;
+        color: #4caf50;
+        box-shadow: 0 0 30px rgba(76, 175, 80, 0.5);
+      }
+
+      .answer-feedback.incorrect {
+        border-color: #f44336;
+        color: #f44336;
+        box-shadow: 0 0 30px rgba(244, 67, 54, 0.5);
+      }
+
+      @keyframes pop-in {
+        0% {
+          transform: translate(-50%, -50%) scale(0.5);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slide-in {
+        from {
+          transform: translateX(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* Resultados finais */
+      .final-results {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .final-score {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #ff0077;
+        margin-bottom: 1rem;
+      }
+
+      .final-message {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+      }
+
+      /* Navegação */
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        animation: fade-in 1s ease-out 1s both;
+      }
+
+      .nav-btn {
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        color: #ff0077;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 0, 119, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* Animações */
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .game-card {
+          padding: 2rem;
+        }
+
+        .battle-arena {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .vs-divider {
+          order: -1;
+          font-size: 2rem;
+        }
+
+        .choice-buttons {
+          grid-template-columns: 1fr;
+        }
+
+        .navigation {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+      }
+      #img img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 20px;
+      }
+
+      #img {
+        width: 100%;
+        max-width: 400px;
+        margin: 0rem auto 2rem;
+        border: 4px solid #ff0077;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 0 60px rgba(255, 0, 119, 0.4),
+          inset 0 0 60px rgba(255, 0, 119, 0.15);
+        animation: fade-in-up 1s ease-out 0.5s both;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="circuit-bg"></div>
+
+    <div class="container">
+      <header class="phase-header">
+        <h1 class="logo">🕹️ RETRO RAIDERS</h1>
+        <h2 class="phase-title">FASE 2 – Batalha: Cérebro vs Processador</h2>
+        <div id="img"><img src="/assets/images/fase2.png" /></div>
+        <p class="phase-description">
+          Uma por uma, classifique cada característica: pertence ao
+          <strong>Cérebro Humano</strong> ou ao <strong>Processador</strong>?
+        </p>
+      </header>
+
+      <div class="game-card">
+        <div class="game-status">
+          <div class="progress-info">
+            Característica <span id="currentNumber">1</span> de
+            <span id="totalNumber">8</span>
+          </div>
+          <div class="score-info">Acertos: <span id="score">0</span></div>
+        </div>
+        <div class="battle-arena">
+          <div class="competitor" id="humanCompetitor">
+            <span class="competitor-icon">🧠</span>
+            <div class="competitor-title">Cérebro Humano</div>
+            <div class="competitor-subtitle">Intuição e Emoção</div>
+          </div>
+
+          <div class="vs-divider">VS</div>
+
+          <div class="competitor" id="computerCompetitor">
+            <span class="competitor-icon">🔲</span>
+            <div class="competitor-title">Processador</div>
+            <div class="competitor-subtitle">Lógica e Precisão</div>
+          </div>
+        </div>
+        <div class="current-characteristic" id="characteristicCard">
+          <div class="question-prompt">
+            Esta característica pertence a qual categoria?
+          </div>
+          <div class="characteristic-text" id="characteristicText">
+            <!-- Texto da característica atual -->
+          </div>
+        </div>
+
+        <div class="choice-buttons">
+          <button class="choice-btn human" onclick="makeChoice('human')">
+            🧠 CÉREBRO HUMANO
+          </button>
+          <button class="choice-btn computer" onclick="makeChoice('computer')">
+            🔲 PROCESSADOR
+          </button>
+        </div>
+
+        <div class="final-results" id="finalResults">
+          <div class="final-score" id="finalScore">8/8</div>
+          <div class="final-message" id="finalMessage">
+            <!-- Mensagem final -->
+          </div>
+        </div>
+      </div>
+
+      <nav class="navigation">
+        <a href="/fase1.html" class="nav-btn">← Fase Anterior</a>
+        <a href="/fase3.html" class="nav-btn" id="nextBtn" style="display: none"
+          >Próxima Fase →</a
+        >
+      </nav>
+    </div>
+
+    <div class="answer-feedback" id="answerFeedback">
+      <!-- Feedback da resposta -->
+    </div>
+
+    <script>
+      const characteristics = [
+        {
+          text: "Usa abstrações, sentimentos e interpretações",
+          category: "human",
+        },
+        {
+          text: "Processa informações com base em impulsos elétricos e sinapses",
+          category: "human",
+        },
+        {
+          text: "Trabalha com transistores e sinais digitais binários",
+          category: "computer",
+        },
+        {
+          text: "Segue instruções lógicas de forma sequencial e precisa",
+          category: "computer",
+        },
+        {
+          text: "Toma decisões com base em contexto, experiência e intuição",
+          category: "human",
+        },
+        {
+          text: "Interpreta dados em forma de bits (0 e 1)",
+          category: "computer",
+        },
+        {
+          text: "Aprende por vivência e adaptação contínua",
+          category: "human",
+        },
+        {
+          text: "Depende de programas previamente escritos",
+          category: "computer",
+        },
+      ];
+
+      let currentIndex = 0;
+      let score = 0;
+      let gameActive = true;
+
+      // Embaralhar características
+      function shuffle(array) {
+        const newArray = [...array];
+        for (let i = newArray.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+      }
+
+      const shuffledCharacteristics = shuffle(characteristics);
+
+      function loadCurrentCharacteristic() {
+        if (currentIndex < shuffledCharacteristics.length) {
+          const current = shuffledCharacteristics[currentIndex];
+          document.getElementById("characteristicText").textContent =
+            current.text;
+          document.getElementById("currentNumber").textContent =
+            currentIndex + 1;
+          document.getElementById("totalNumber").textContent =
+            shuffledCharacteristics.length;
+
+          // Animação de entrada
+          const card = document.getElementById("characteristicCard");
+          card.style.animation = "none";
+          card.offsetHeight; // Trigger reflow
+          card.style.animation = "slide-in 0.5s ease-out";
+        }
+      }
+
+      function makeChoice(choice) {
+        if (!gameActive) return;
+
+        const current = shuffledCharacteristics[currentIndex];
+        const isCorrect = choice === current.category;
+
+        if (isCorrect) {
+          score++;
+          showFeedback(true, "Correto! ✅");
+          highlightCompetitor(choice);
+        } else {
+          const correctCategory =
+            current.category === "human" ? "Cérebro" : "Processador";
+          showFeedback(
+            false,
+            `Incorreto! ❌\nResposta correta: ${correctCategory}`
+          );
+          highlightCompetitor(current.category);
+        }
+
+        // Atualizar score
+        document.getElementById("score").textContent = score;
+
+        // Próxima característica após delay
+        setTimeout(() => {
+          currentIndex++;
+          if (currentIndex < shuffledCharacteristics.length) {
+            loadCurrentCharacteristic();
+          } else {
+            endGame();
+          }
+        }, 2000);
+      }
+
+      function highlightCompetitor(category) {
+        const humanComp = document.getElementById("humanCompetitor");
+        const computerComp = document.getElementById("computerCompetitor");
+
+        // Reset
+        humanComp.classList.remove("active");
+        computerComp.classList.remove("active");
+
+        // Highlight correto
+        if (category === "human") {
+          humanComp.classList.add("active");
+        } else {
+          computerComp.classList.add("active");
+        }
+
+        // Remove highlight após delay
+        setTimeout(() => {
+          humanComp.classList.remove("active");
+          computerComp.classList.remove("active");
+        }, 1800);
+      }
+
+      function showFeedback(isCorrect, message) {
+        const feedback = document.getElementById("answerFeedback");
+        feedback.className = `answer-feedback ${
+          isCorrect ? "correct" : "incorrect"
+        }`;
+        feedback.innerHTML = message.replace("\n", "<br>");
+        feedback.style.display = "block";
+
+        setTimeout(() => {
+          feedback.style.display = "none";
+        }, 2000);
+      }
+
+      function endGame() {
+        gameActive = false;
+        const percentage = Math.round(
+          (score / shuffledCharacteristics.length) * 100
+        );
+
+        // Esconder elementos do jogo
+        document.getElementById("characteristicCard").style.display = "none";
+        document.querySelector(".choice-buttons").style.display = "none";
+
+        // Mostrar resultados
+        const finalResults = document.getElementById("finalResults");
+        const finalScore = document.getElementById("finalScore");
+        const finalMessage = document.getElementById("finalMessage");
+
+        finalScore.textContent = `${score}/${shuffledCharacteristics.length} (${percentage}%)`;
+
+        if (percentage === 100) {
+          finalMessage.innerHTML = `
+                    🎉 <strong>Perfeito!</strong> Você dominou completamente as diferenças entre cérebro humano e processador!<br><br>
+                    <em>O cérebro trabalha com intuição e adaptação, enquanto o processador segue lógica precisa e programada.</em>
+                `;
+          document.getElementById("nextBtn").style.display = "inline-block";
+        } else if (percentage >= 75) {
+          finalMessage.innerHTML = `
+                    👏 <strong>Muito bem!</strong> Você entende bem as diferenças fundamentais!<br><br>
+                    <em>Continue estudando as características únicas de cada tipo de inteligência.</em>
+                `;
+          document.getElementById("nextBtn").style.display = "inline-block";
+        } else {
+          finalMessage.innerHTML = `
+                    📚 <strong>Continue praticando!</strong> Revise as diferenças entre inteligência biológica e artificial.<br><br>
+                    <em>Dica: Humanos usam intuição e contexto, computadores usam lógica e precisão.</em>
+                `;
+        }
+
+        finalResults.style.display = "block";
+      }
+
+      // Inicializar jogo
+      window.addEventListener("load", () => {
+        loadCurrentCharacteristic();
+      });
+    </script>
+  </body>
+</html>

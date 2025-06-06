@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro Raiders - Fase 4</title>
+
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a0d1a 50%,
+          #0d0d0d 100%
+        );
+        color: #f2f2f2;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Mesmo fundo de circuitos */
+      .circuit-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 120%;
+        height: 120%;
+        opacity: 0.06;
+        z-index: -1;
+        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='circuit-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff0077'/%3E%3Cstop offset='50%25' style='stop-color:%236600cc'/%3E%3Cstop offset='100%25' style='stop-color:%23ff0077'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg stroke='url(%23circuit-grad)' stroke-width='1' fill='none'%3E%3Cpath d='M20,20 L80,20 L80,60 L140,60 L140,100'/%3E%3Cpath d='M20,80 L60,80 L60,120 L120,120 L120,180'/%3E%3Cpath d='M180,20 L120,20 L120,40 L60,40 L60,80'/%3E%3Cpath d='M180,80 L140,80 L140,140 L80,140 L80,180'/%3E%3Cpath d='M20,160 L80,160 L80,120 L140,120'/%3E%3Cpath d='M160,160 L120,160 L120,100 L80,100'/%3E%3Cpath d='M180,140 L160,140 L160,180'/%3E%3Cpath d='M40,180 L40,140 L20,140'/%3E%3C/g%3E%3Cg fill='url(%23circuit-grad)'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='80' cy='20' r='2'/%3E%3Ccircle cx='80' cy='60' r='2'/%3E%3Ccircle cx='140' cy='60' r='2'/%3E%3Ccircle cx='140' cy='100' r='2'/%3E%3Ccircle cx='20' cy='80' r='2'/%3E%3Ccircle cx='60' cy='80' r='2'/%3E%3Ccircle cx='60' cy='120' r='2'/%3E%3Ccircle cx='120' cy='120' r='2'/%3E%3Ccircle cx='120' cy='180' r='2'/%3E%3Ccircle cx='180' cy='20' r='2'/%3E%3Ccircle cx='120' cy='20' r='2'/%3E%3Ccircle cx='120' cy='40' r='2'/%3E%3Ccircle cx='60' cy='40' r='2'/%3E%3Ccircle cx='180' cy='80' r='2'/%3E%3Ccircle cx='140' cy='80' r='2'/%3E%3Ccircle cx='140' cy='140' r='2'/%3E%3Ccircle cx='80' cy='140' r='2'/%3E%3Ccircle cx='80' cy='180' r='2'/%3E%3Ccircle cx='20' cy='160' r='2'/%3E%3Ccircle cx='80' cy='160' r='2'/%3E%3Ccircle cx='160' cy='160' r='2'/%3E%3Ccircle cx='120' cy='160' r='2'/%3E%3Ccircle cx='80' cy='100' r='2'/%3E%3Ccircle cx='180' cy='140' r='2'/%3E%3Ccircle cx='160' cy='140' r='2'/%3E%3Ccircle cx='160' cy='180' r='2'/%3E%3Ccircle cx='40' cy='180' r='2'/%3E%3Ccircle cx='40' cy='140' r='2'/%3E%3Ccircle cx='20' cy='140' r='2'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 400px 400px;
+        animation: circuit-flow 60s linear infinite;
+      }
+
+      @keyframes circuit-flow {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 0.06;
+        }
+        25% {
+          opacity: 0.08;
+        }
+        50% {
+          transform: translate(-100px, -100px) rotate(180deg);
+          opacity: 0.06;
+        }
+        75% {
+          opacity: 0.04;
+        }
+        100% {
+          transform: translate(0, 0) rotate(360deg);
+          opacity: 0.06;
+        }
+      }
+
+      /* Container principal */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Header da fase */
+      .phase-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fade-in-down 1s ease-out;
+      }
+
+      .logo {
+        font-family: "Orbitron", monospace;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #ff0077;
+        text-shadow: 0 0 20px rgba(255, 0, 119, 0.8);
+        margin-bottom: 0.5rem;
+      }
+
+      .phase-title {
+        font-size: 1.8rem;
+        color: #d8b4f8;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .phase-description {
+        font-size: 1rem;
+        color: #e0e0e0;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Card do jogo */
+      .game-card {
+        background: rgba(0, 0, 0, 0.85);
+        border: 3px solid #ff0077;
+        border-radius: 25px;
+        padding: 3rem;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 60px rgba(255, 0, 119, 0.4),
+          inset 0 0 60px rgba(255, 0, 119, 0.15);
+        animation: fade-in-up 1s ease-out 0.5s both;
+        position: relative;
+      }
+
+      /* Status do progresso */
+      .progress-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 0, 119, 0.3);
+      }
+
+      .progress-info {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ff0077;
+      }
+
+      .score-info {
+        font-size: 1rem;
+        color: #d8b4f8;
+      }
+
+      /* Área do jogo de correspondência */
+      .matching-game {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+
+      /* Coluna dos códigos binários */
+      .binary-column {
+        background: rgba(255, 0, 119, 0.05);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        padding: 2rem;
+      }
+
+      .column-title {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #ff0077;
+        margin-bottom: 2rem;
+        font-family: "Orbitron", monospace;
+      }
+
+      .binary-card {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border: 2px solid #555;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        user-select: none;
+        text-align: center;
+      }
+
+      .binary-card:hover {
+        border-color: #ff0077;
+        background: linear-gradient(145deg, #2a1a2a, #3a2a3a);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 0, 119, 0.2);
+      }
+
+      .binary-card.selected {
+        border-color: #ff0077;
+        background: linear-gradient(145deg, #ff0077, #cc0066);
+        color: white;
+        box-shadow: 0 0 20px rgba(255, 0, 119, 0.4);
+      }
+
+      .binary-card.matched {
+        border-color: #4caf50;
+        background: linear-gradient(145deg, #4caf50, #388e3c);
+        color: white;
+        cursor: default;
+        transform: none;
+      }
+
+      .binary-code {
+        font-family: "Orbitron", monospace;
+        font-size: 2rem;
+        font-weight: 900;
+        color: #ff0077;
+        margin-bottom: 0.5rem;
+        letter-spacing: 3px;
+      }
+
+      .binary-card.selected .binary-code,
+      .binary-card.matched .binary-code {
+        color: white;
+      }
+
+      .binary-arrow {
+        font-size: 1.5rem;
+        color: #888;
+        margin: 0.5rem 0;
+      }
+
+      .binary-card.selected .binary-arrow,
+      .binary-card.matched .binary-arrow {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      /* Coluna das instruções */
+      .instructions-column {
+        background: rgba(0, 204, 204, 0.05);
+        border: 2px solid #00cccc;
+        border-radius: 20px;
+        padding: 2rem;
+      }
+
+      .instruction-card {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border: 2px solid #555;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        position: relative;
+      }
+
+      .instruction-card:hover {
+        border-color: #00cccc;
+        background: linear-gradient(145deg, #1a2a2a, #2a3a3a);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 204, 204, 0.2);
+      }
+
+      .instruction-card.available {
+        border-color: #00cccc;
+        background: linear-gradient(145deg, #00cccc, #0099cc);
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 204, 204, 0.4);
+      }
+
+      .instruction-card.matched {
+        border-color: #4caf50;
+        background: linear-gradient(145deg, #4caf50, #388e3c);
+        color: white;
+        cursor: default;
+        transform: none;
+      }
+
+      .instruction-name {
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 1rem;
+        font-family: "Orbitron", monospace;
+        color: #00cccc;
+      }
+
+      .instruction-card.available .instruction-name,
+      .instruction-card.matched .instruction-name {
+        color: white;
+      }
+
+      .instruction-symbol {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .instruction-explanation {
+        font-size: 0.9rem;
+        color: #ccc;
+        line-height: 1.4;
+      }
+
+      .instruction-card.available .instruction-explanation,
+      .instruction-card.matched .instruction-explanation {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      /* Linha de conexão visual */
+      .connection-line {
+        position: absolute;
+        height: 3px;
+        background: linear-gradient(90deg, #ff0077, #00cccc);
+        z-index: 10;
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(255, 0, 119, 0.5);
+        display: none;
+        animation: draw-line 0.5s ease-out;
+      }
+
+      @keyframes draw-line {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      /* Botões de ação */
+      .game-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, #ff0077, #cc0066);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 0, 119, 0.4);
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 0, 119, 0.6);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #ff0077;
+        border: 2px solid #ff0077;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 0, 119, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* Feedback */
+      .feedback {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+        animation: fade-in 0.5s ease-out;
+      }
+
+      .feedback.success {
+        background: rgba(76, 175, 80, 0.1);
+        border: 2px solid #4caf50;
+        color: #4caf50;
+      }
+
+      .feedback.error {
+        background: rgba(244, 67, 54, 0.1);
+        border: 2px solid #f44336;
+        color: #f44336;
+      }
+
+      /* Resultados finais */
+      .final-results {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .final-score {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #ff0077;
+        margin-bottom: 1rem;
+      }
+
+      .final-message {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+      }
+
+      /* Navegação */
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        animation: fade-in 1s ease-out 1s both;
+      }
+
+      .nav-btn {
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        color: #ff0077;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 0, 119, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* Animações */
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .game-card {
+          padding: 2rem;
+        }
+
+        .matching-game {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .navigation {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        .binary-code {
+          font-size: 1.5rem;
+          letter-spacing: 2px;
+        }
+
+        .instruction-name {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="circuit-bg"></div>
+
+    <div class="container">
+      <header class="phase-header">
+        <h1 class="logo">🕹️ RETRO RAIDERS</h1>
+        <h2 class="phase-title">FASE 4 – Código de Máquina</h2>
+        <p class="phase-description">
+          Decodifique os segredos da linguagem de máquina! <br />Use o que
+          aprendeu nas tabelas verdade da fase anterior para associar cada
+          código binário à instrução lógica correspondente. Clique em um código
+          à esquerda e depois na porta lógica correta à direita.
+        </p>
+      </header>
+
+      <div class="game-card">
+        <div class="progress-status">
+          <div class="progress-info">
+            Correspondências: <span id="matchCount">0</span> de 5
+          </div>
+          <div class="score-info">Tentativas: <span id="attempts">0</span></div>
+        </div>
+
+        <div class="matching-game">
+          <!-- Coluna dos códigos binários -->
+          <div class="binary-column">
+            <h3 class="column-title">⚙️ CÓDIGOS BINÁRIOS</h3>
+
+            <div class="binary-card" data-id="1">
+              <div class="binary-code">0001</div>
+              <div class="binary-arrow">↓</div>
+              <div style="color: #888; font-size: 0.9rem">Código #1</div>
+            </div>
+
+            <div class="binary-card" data-id="2">
+              <div class="binary-code">0010</div>
+              <div class="binary-arrow">↓</div>
+              <div style="color: #888; font-size: 0.9rem">Código #2</div>
+            </div>
+
+            <div class="binary-card" data-id="3">
+              <div class="binary-code">0100</div>
+              <div class="binary-arrow">↓</div>
+              <div style="color: #888; font-size: 0.9rem">Código #3</div>
+            </div>
+
+            <div class="binary-card" data-id="4">
+              <div class="binary-code">1000</div>
+              <div class="binary-arrow">↓</div>
+              <div style="color: #888; font-size: 0.9rem">Código #4</div>
+            </div>
+
+            <div class="binary-card" data-id="5">
+              <div class="binary-code">1111</div>
+              <div class="binary-arrow">↓</div>
+              <div style="color: #888; font-size: 0.9rem">Código #5</div>
+            </div>
+          </div>
+
+          <!-- Coluna das instruções -->
+          <div class="instructions-column">
+            <h3 class="column-title">💻 INSTRUÇÕES</h3>
+
+            <div class="instruction-card" data-instruction="AND">
+              <div class="instruction-name">AND</div>
+              <div class="instruction-symbol">∧</div>
+              <div class="instruction-explanation">
+                Operação lógica E - retorna verdadeiro apenas se ambas entradas
+                forem verdadeiras
+              </div>
+            </div>
+
+            <div class="instruction-card" data-instruction="OR">
+              <div class="instruction-name">OR</div>
+              <div class="instruction-symbol">∨</div>
+              <div class="instruction-explanation">
+                Operação lógica OU - retorna verdadeiro se pelo menos uma
+                entrada for verdadeira
+              </div>
+            </div>
+
+            <div class="instruction-card" data-instruction="LOAD">
+              <div class="instruction-name">LOAD</div>
+              <div class="instruction-symbol">📥</div>
+              <div class="instruction-explanation">
+                Carrega dados da memória para um registrador
+              </div>
+            </div>
+
+            <div class="instruction-card" data-instruction="JUMP">
+              <div class="instruction-name">JUMP</div>
+              <div class="instruction-symbol">↗️</div>
+              <div class="instruction-explanation">
+                Salta para um endereço específico na memória
+              </div>
+            </div>
+
+            <div class="instruction-card" data-instruction="STOP">
+              <div class="instruction-name">STOP</div>
+              <div class="instruction-symbol">🛑</div>
+              <div class="instruction-explanation">
+                Para a execução do programa
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="game-actions">
+          <button class="btn btn-secondary" id="resetBtn">🔄 Reiniciar</button>
+          <button class="btn btn-primary" id="checkBtn" disabled>
+            ✓ Verificar Todas
+          </button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="final-results" id="finalResults">
+          <div class="final-score" id="finalScore">5/5</div>
+          <div class="final-message" id="finalMessage">
+            <!-- Mensagem final -->
+          </div>
+        </div>
+      </div>
+
+      <nav class="navigation">
+        <a href="fase3-2.html" class="nav-btn">← Fase Anterior</a>
+        <a href="fase5.html" class="nav-btn" id="nextBtn" style="display: none"
+          >Próxima Fase →</a
+        >
+      </nav>
+    </div>
+
+    <script>
+      // Estado do jogo
+      let gameState = {
+        selectedBinary: null,
+        selectedInstruction: null,
+        matches: [],
+        attempts: 0,
+        totalMatches: 5,
+      };
+
+      // Mapeamento correto (binário -> instrução)
+      const correctMatches = {
+        1: "AND", // 0001 -> AND
+        2: "OR", // 0010 -> OR
+        3: "LOAD", // 0100 -> LOAD
+        4: "JUMP", // 1000 -> JUMP
+        5: "STOP", // 1111 -> STOP
+      };
+
+      // Elementos DOM
+      const binaryCards = document.querySelectorAll(".binary-card");
+      const instructionCards = document.querySelectorAll(".instruction-card");
+      const matchCountElement = document.getElementById("matchCount");
+      const attemptsElement = document.getElementById("attempts");
+      const resetBtn = document.getElementById("resetBtn");
+      const checkBtn = document.getElementById("checkBtn");
+      const feedback = document.getElementById("feedback");
+      const finalResults = document.getElementById("finalResults");
+      const finalScore = document.getElementById("finalScore");
+      const finalMessage = document.getElementById("finalMessage");
+      const nextBtn = document.getElementById("nextBtn");
+
+      // Event listeners
+      binaryCards.forEach((card) => {
+        card.addEventListener("click", () => selectBinary(card));
+      });
+
+      instructionCards.forEach((card) => {
+        card.addEventListener("click", () => selectInstruction(card));
+      });
+
+      resetBtn.addEventListener("click", resetGame);
+      checkBtn.addEventListener("click", checkAllMatches);
+
+      // Função para selecionar código binário
+      function selectBinary(card) {
+        if (card.classList.contains("matched")) return;
+
+        // Remove seleção anterior
+        binaryCards.forEach((c) => c.classList.remove("selected"));
+
+        // Seleciona o novo card
+        card.classList.add("selected");
+        gameState.selectedBinary = card.dataset.id;
+
+        // Se há uma instrução selecionada, tenta fazer o match
+        if (gameState.selectedInstruction) {
+          attemptMatch();
+        }
+      }
+
+      // Função para selecionar instrução
+      function selectInstruction(card) {
+        if (card.classList.contains("matched")) return;
+
+        // Remove seleção anterior
+        instructionCards.forEach((c) => c.classList.remove("available"));
+
+        // Seleciona o novo card
+        card.classList.add("available");
+        gameState.selectedInstruction = card.dataset.instruction;
+
+        // Se há um binário selecionado, tenta fazer o match
+        if (gameState.selectedBinary) {
+          attemptMatch();
+        }
+      }
+
+      // Função para tentar fazer correspondência
+      function attemptMatch() {
+        gameState.attempts++;
+        attemptsElement.textContent = gameState.attempts;
+
+        const binaryId = gameState.selectedBinary;
+        const instruction = gameState.selectedInstruction;
+
+        // Verifica se o match está correto
+        if (correctMatches[binaryId] === instruction) {
+          // Match correto!
+          makeMatch(binaryId, instruction);
+          showFeedback("✅ Correspondência correta!", "success");
+
+          gameState.matches.push({
+            binary: binaryId,
+            instruction: instruction,
+          });
+          matchCountElement.textContent = gameState.matches.length;
+
+          // Verifica se completou o jogo
+          if (gameState.matches.length === gameState.totalMatches) {
+            setTimeout(completeGame, 1000);
+          }
+        } else {
+          // Match incorreto
+          showFeedback(
+            "❌ Correspondência incorreta. Tente novamente!",
+            "error"
+          );
+        }
+
+        // Reset seleções
+        clearSelections();
+      }
+
+      // Função para marcar match como correto
+      function makeMatch(binaryId, instruction) {
+        const binaryCard = document.querySelector(`[data-id="${binaryId}"]`);
+        const instructionCard = document.querySelector(
+          `[data-instruction="${instruction}"]`
+        );
+
+        binaryCard.classList.remove("selected");
+        binaryCard.classList.add("matched");
+
+        instructionCard.classList.remove("available");
+        instructionCard.classList.add("matched");
+      }
+
+      // Função para limpar seleções
+      function clearSelections() {
+        gameState.selectedBinary = null;
+        gameState.selectedInstruction = null;
+
+        binaryCards.forEach((card) => {
+          if (!card.classList.contains("matched")) {
+            card.classList.remove("selected");
+          }
+        });
+
+        instructionCards.forEach((card) => {
+          if (!card.classList.contains("matched")) {
+            card.classList.remove("available");
+          }
+        });
+      }
+
+      // Função para mostrar feedback
+      function showFeedback(message, type) {
+        feedback.textContent = message;
+        feedback.className = `feedback ${type}`;
+        feedback.style.display = "block";
+
+        setTimeout(() => {
+          feedback.style.display = "none";
+        }, 3000);
+      }
+
+      // Função para verificar todas as correspondências
+      function checkAllMatches() {
+        if (gameState.matches.length === gameState.totalMatches) {
+          completeGame();
+        } else {
+          showFeedback(
+            `Você precisa completar todas as ${gameState.totalMatches} correspondências!`,
+            "error"
+          );
+        }
+      }
+
+      // Função para completar o jogo
+      function completeGame() {
+        finalScore.textContent = `${gameState.matches.length}/${gameState.totalMatches}`;
+
+        let message = "";
+        let efficiency = Math.round(
+          (gameState.totalMatches / gameState.attempts) * 100
+        );
+
+        if (efficiency >= 90) {
+          message = `🎉 EXCELENTE! Você dominou os códigos de máquina com ${efficiency}% de eficiência! Seus conhecimentos em linguagem binária são impressionantes!`;
+        } else if (efficiency >= 70) {
+          message = `👏 MUITO BOM! Você decodificou todos os códigos com ${efficiency}% de eficiência! Continue praticando para dominar completamente a linguagem de máquina!`;
+        } else {
+          message = `✅ PARABÉNS! Você completou a fase com ${efficiency}% de eficiência! A prática leva à perfeição na programação em baixo nível!`;
+        }
+
+        finalMessage.textContent = message;
+        finalResults.style.display = "block";
+        nextBtn.style.display = "inline-block";
+
+        // Efeito de celebração
+        document.body.style.animation = "celebration 2s ease-in-out";
+        setTimeout(() => {
+          document.body.style.animation = "";
+        }, 2000);
+      }
+
+      // Função para resetar o jogo
+      function resetGame() {
+        gameState = {
+          selectedBinary: null,
+          selectedInstruction: null,
+          matches: [],
+          attempts: 0,
+          totalMatches: 5,
+        };
+
+        // Reset visual de todos os cards
+        binaryCards.forEach((card) => {
+          card.classList.remove("selected", "matched");
+        });
+
+        instructionCards.forEach((card) => {
+          card.classList.remove("available", "matched");
+        });
+
+        // Reset contadores
+        matchCountElement.textContent = "0";
+        attemptsElement.textContent = "0";
+
+        // Esconder resultados
+        finalResults.style.display = "none";
+        nextBtn.style.display = "none";
+        feedback.style.display = "none";
+
+        checkBtn.disabled = false;
+      }
+
+      // Atualizar botão de verificação baseado no progresso
+      function updateCheckButton() {
+        checkBtn.disabled = gameState.matches.length < gameState.totalMatches;
+      }
+
+      // Observar mudanças no progresso
+      setInterval(updateCheckButton, 100);
+
+      // Efeito de celebração
+      const style = document.createElement("style");
+      style.textContent = `
+        @keyframes celebration {
+          0%, 100% { filter: hue-rotate(0deg) brightness(1); }
+          25% { filter: hue-rotate(90deg) brightness(1.2); }
+          50% { filter: hue-rotate(180deg) brightness(1); }
+          75% { filter: hue-rotate(270deg) brightness(1.2); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Inicialização
+      updateCheckButton();
+    </script>
+  </body>
+</html>

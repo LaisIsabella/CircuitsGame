@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro Raiders - Fase 6</title>
+
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a0d1a 50%,
+          #0d0d0d 100%
+        );
+        color: #f2f2f2;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Mesmo fundo de circuitos */
+      .circuit-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 120%;
+        height: 120%;
+        opacity: 0.06;
+        z-index: -1;
+        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='circuit-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff0077'/%3E%3Cstop offset='50%25' style='stop-color:%236600cc'/%3E%3Cstop offset='100%25' style='stop-color:%23ff0077'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg stroke='url(%23circuit-grad)' stroke-width='1' fill='none'%3E%3Cpath d='M20,20 L80,20 L80,60 L140,60 L140,100'/%3E%3Cpath d='M20,80 L60,80 L60,120 L120,120 L120,180'/%3E%3Cpath d='M180,20 L120,20 L120,40 L60,40 L60,80'/%3E%3Cpath d='M180,80 L140,80 L140,140 L80,140 L80,180'/%3E%3Cpath d='M20,160 L80,160 L80,120 L140,120'/%3E%3Cpath d='M160,160 L120,160 L120,100 L80,100'/%3E%3Cpath d='M180,140 L160,140 L160,180'/%3E%3Cpath d='M40,180 L40,140 L20,140'/%3E%3C/g%3E%3Cg fill='url(%23circuit-grad)'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='80' cy='20' r='2'/%3E%3Ccircle cx='80' cy='60' r='2'/%3E%3Ccircle cx='140' cy='60' r='2'/%3E%3Ccircle cx='140' cy='100' r='2'/%3E%3Ccircle cx='20' cy='80' r='2'/%3E%3Ccircle cx='60' cy='80' r='2'/%3E%3Ccircle cx='60' cy='120' r='2'/%3E%3Ccircle cx='120' cy='120' r='2'/%3E%3Ccircle cx='120' cy='180' r='2'/%3E%3Ccircle cx='180' cy='20' r='2'/%3E%3Ccircle cx='120' cy='20' r='2'/%3E%3Ccircle cx='120' cy='40' r='2'/%3E%3Ccircle cx='60' cy='40' r='2'/%3E%3Ccircle cx='180' cy='80' r='2'/%3E%3Ccircle cx='140' cy='80' r='2'/%3E%3Ccircle cx='140' cy='140' r='2'/%3E%3Ccircle cx='80' cy='140' r='2'/%3E%3Ccircle cx='80' cy='180' r='2'/%3E%3Ccircle cx='20' cy='160' r='2'/%3E%3Ccircle cx='80' cy='160' r='2'/%3E%3Ccircle cx='160' cy='160' r='2'/%3E%3Ccircle cx='120' cy='160' r='2'/%3E%3Ccircle cx='80' cy='100' r='2'/%3E%3Ccircle cx='180' cy='140' r='2'/%3E%3Ccircle cx='160' cy='140' r='2'/%3E%3Ccircle cx='160' cy='180' r='2'/%3E%3Ccircle cx='40' cy='180' r='2'/%3E%3Ccircle cx='40' cy='140' r='2'/%3E%3Ccircle cx='20' cy='140' r='2'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 400px 400px;
+        animation: circuit-flow 60s linear infinite;
+      }
+
+      @keyframes circuit-flow {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 0.06;
+        }
+        25% {
+          opacity: 0.08;
+        }
+        50% {
+          transform: translate(-100px, -100px) rotate(180deg);
+          opacity: 0.06;
+        }
+        75% {
+          opacity: 0.04;
+        }
+        100% {
+          transform: translate(0, 0) rotate(360deg);
+          opacity: 0.06;
+        }
+      }
+
+      /* Container principal */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Header da fase */
+      .phase-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fade-in-down 1s ease-out;
+      }
+
+      .logo {
+        font-family: "Orbitron", monospace;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #ff0077;
+        text-shadow: 0 0 20px rgba(255, 0, 119, 0.8);
+        margin-bottom: 0.5rem;
+      }
+
+      .phase-title {
+        font-size: 1.8rem;
+        color: #d8b4f8;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .phase-description {
+        font-size: 1rem;
+        color: #e0e0e0;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Card do jogo */
+      .game-card {
+        background: rgba(0, 0, 0, 0.85);
+        border: 3px solid #ff0077;
+        border-radius: 25px;
+        padding: 3rem;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 60px rgba(255, 0, 119, 0.4),
+          inset 0 0 60px rgba(255, 0, 119, 0.15);
+        animation: fade-in-up 1s ease-out 0.5s both;
+        position: relative;
+      }
+
+      /* Status do progresso */
+      .progress-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 0, 119, 0.3);
+      }
+
+      .progress-info {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ff0077;
+      }
+
+      .score-info {
+        font-size: 1rem;
+        color: #d8b4f8;
+      }
+
+      /* Área de explicação */
+      .explanation-area {
+        background: rgba(0, 204, 204, 0.1);
+        border: 2px solid #00cccc;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+
+      .explanation-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #00cccc;
+        margin-bottom: 1rem;
+        font-family: "Orbitron", monospace;
+      }
+
+      .explanation-text {
+        font-size: 1rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .threshold-info {
+        background: rgba(255, 193, 7, 0.1);
+        border: 2px solid #ffc107;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+
+      .threshold-text {
+        color: #ffc107;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+
+      /* Grid de medidores */
+      .voltage-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      /* Cada medidor de voltagem */
+      .voltage-meter {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border: 2px solid #555;
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .voltage-meter.bit-0 {
+        border-color: #f44336;
+        background: linear-gradient(145deg, #2a1a1a, #3a2a2a);
+      }
+
+      .voltage-meter.bit-1 {
+        border-color: #4caf50;
+        background: linear-gradient(145deg, #1a2a1a, #2a3a2a);
+      }
+
+      .voltage-display {
+        font-size: 2.5rem;
+        font-weight: 900;
+        font-family: "Orbitron", monospace;
+        color: #00cccc;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px rgba(0, 204, 204, 0.5);
+      }
+
+      .voltage-bar {
+        width: 100%;
+        height: 20px;
+        background: #333;
+        border-radius: 10px;
+        margin: 1rem 0;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid #555;
+      }
+
+      .voltage-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #f44336, #ff9800, #4caf50);
+        border-radius: 8px;
+        transition: width 0.3s ease;
+        position: relative;
+      }
+
+      .voltage-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: voltage-flow 2s ease-in-out infinite;
+      }
+
+      @keyframes voltage-flow {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .threshold-line {
+        position: absolute;
+        top: 0;
+        left: 60%; /* 3V de 5V = 60% */
+        width: 2px;
+        height: 100%;
+        background: #ffc107;
+        box-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
+      }
+
+      .threshold-line::before {
+        content: "3V";
+        position: absolute;
+        top: -25px;
+        left: -10px;
+        font-size: 0.8rem;
+        color: #ffc107;
+        font-weight: 700;
+      }
+
+      .bit-display {
+        font-size: 3rem;
+        font-weight: 900;
+        font-family: "Orbitron", monospace;
+        margin: 1rem 0;
+        padding: 1rem;
+        border-radius: 15px;
+        border: 3px solid;
+        transition: all 0.3s ease;
+      }
+
+      .bit-display.bit-0 {
+        color: #f44336;
+        border-color: #f44336;
+        background: rgba(244, 67, 54, 0.1);
+        box-shadow: 0 0 20px rgba(244, 67, 54, 0.3);
+      }
+
+      .bit-display.bit-1 {
+        color: #4caf50;
+        border-color: #4caf50;
+        background: rgba(76, 175, 80, 0.1);
+        box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+      }
+
+      .bit-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      .bit-btn {
+        padding: 0.8rem 1.5rem;
+        border: 2px solid;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "Orbitron", monospace;
+        background: transparent;
+      }
+
+      .bit-btn.btn-0 {
+        color: #f44336;
+        border-color: #f44336;
+      }
+
+      .bit-btn.btn-0:hover {
+        background: rgba(244, 67, 54, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .bit-btn.btn-0.selected {
+        background: linear-gradient(145deg, #f44336, #d32f2f);
+        color: white;
+        box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+      }
+
+      .bit-btn.btn-1 {
+        color: #4caf50;
+        border-color: #4caf50;
+      }
+
+      .bit-btn.btn-1:hover {
+        background: rgba(76, 175, 80, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .bit-btn.btn-1.selected {
+        background: linear-gradient(145deg, #4caf50, #388e3c);
+        color: white;
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+      }
+
+      /* Botões de ação */
+      .game-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, #ff0077, #cc0066);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 0, 119, 0.4);
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 0, 119, 0.6);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #ff0077;
+        border: 2px solid #ff0077;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 0, 119, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* Feedback */
+      .feedback {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+        animation: fade-in 0.5s ease-out;
+      }
+
+      .feedback.success {
+        background: rgba(76, 175, 80, 0.1);
+        border: 2px solid #4caf50;
+        color: #4caf50;
+      }
+
+      .feedback.error {
+        background: rgba(244, 67, 54, 0.1);
+        border: 2px solid #f44336;
+        color: #f44336;
+      }
+
+      .feedback.info {
+        background: rgba(33, 150, 243, 0.1);
+        border: 2px solid #2196f3;
+        color: #2196f3;
+      }
+
+      /* Resultados finais */
+      .final-results {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .final-score {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #ff0077;
+        margin-bottom: 1rem;
+      }
+
+      .final-message {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+      }
+
+      /* Navegação */
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        animation: fade-in 1s ease-out 1s both;
+      }
+
+      .nav-btn {
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        color: #ff0077;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 0, 119, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* Animações */
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .game-card {
+          padding: 2rem;
+        }
+
+        .voltage-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+
+        .bit-buttons {
+          flex-direction: column;
+        }
+
+        .navigation {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="circuit-bg"></div>
+
+    <div class="container">
+      <header class="phase-header">
+        <h1 class="logo">🕹️ RETRO RAIDERS</h1>
+        <h2 class="phase-title">FASE 6 – Voltagens e Bits</h2>
+        <p class="phase-description">
+          Aprenda como computadores convertem voltagens elétricas em informação
+          digital. Para cada voltagem, escolha se representa um bit 0 ou 1!
+        </p>
+      </header>
+
+      <div class="game-card">
+        <div class="progress-status">
+          <div class="progress-info">
+            Respostas: <span id="answeredCount">0</span> de 6
+          </div>
+          <div class="score-info">
+            Acertos: <span id="correctCount">0</span>
+          </div>
+        </div>
+
+        <div class="explanation-area">
+          <div class="explanation-title">
+            🔌 Como Funciona a Conversão Digital
+          </div>
+          <div class="explanation-text">
+            Em circuitos digitais, diferentes voltagens representam informação
+            binária. Existe um <strong>limiar (threshold)</strong> que determina
+            se um sinal elétrico representa 0 ou 1.
+          </div>
+          <div class="threshold-info">
+            <div class="threshold-text">
+              ⚡ Limiar: 3V | Abaixo de 3V = Bit 0 | Acima de 3V = Bit 1
+            </div>
+          </div>
+        </div>
+
+        <div class="voltage-grid" id="voltageGrid">
+          <!-- Medidores serão inseridos aqui -->
+        </div>
+
+        <div class="game-actions">
+          <button class="btn btn-secondary" id="resetBtn">🔄 Reiniciar</button>
+          <button class="btn btn-primary" id="checkBtn">
+            ✓ Verificar Respostas
+          </button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="final-results" id="finalResults">
+          <div class="final-score" id="finalScore">6/6</div>
+          <div class="final-message" id="finalMessage">
+            <!-- Mensagem final -->
+          </div>
+        </div>
+      </div>
+
+      <nav class="navigation">
+        <a href="/fase5.html" class="nav-btn">← Fase Anterior</a>
+        <a href="/fase7.html" class="nav-btn" id="nextBtn" style="display: none"
+          >Próxima Fase →</a
+        >
+      </nav>
+    </div>
+
+    <script>
+      // Dados das voltagens
+      const voltageData = [
+        { voltage: 0, expected: 0 },
+        { voltage: 1.5, expected: 0 },
+        { voltage: 2.8, expected: 0 },
+        { voltage: 3.3, expected: 1 },
+        { voltage: 4.7, expected: 1 },
+        { voltage: 5, expected: 1 },
+      ];
+
+      let userAnswers = {};
+      let gameCompleted = false;
+
+      // Inicializar jogo
+      document.addEventListener("DOMContentLoaded", function () {
+        createVoltageMeters();
+        setupEventListeners();
+        updateProgress();
+      });
+
+      function createVoltageMeters() {
+        const container = document.getElementById("voltageGrid");
+
+        voltageData.forEach((data, index) => {
+          const meter = document.createElement("div");
+          meter.className = "voltage-meter";
+          meter.dataset.index = index;
+
+          meter.innerHTML = `
+                    <div class="voltage-display">${data.voltage}V</div>
+                    <div class="voltage-bar">
+                        <div class="voltage-fill" style="width: ${
+                          (data.voltage / 5) * 100
+                        }%"></div>
+                        <div class="threshold-line"></div>
+                    </div>
+                    <div class="bit-display" id="bitDisplay${index}">?</div>
+                    <div class="bit-buttons">
+                        <button class="bit-btn btn-0" onclick="selectBit(${index}, 0)">0</button>
+                        <button class="bit-btn btn-1" onclick="selectBit(${index}, 1)">1</button>
+                    </div>
+                `;
+
+          container.appendChild(meter);
+        });
+      }
+
+      function setupEventListeners() {
+        document
+          .getElementById("resetBtn")
+          .addEventListener("click", resetGame);
+        document
+          .getElementById("checkBtn")
+          .addEventListener("click", checkAnswers);
+      }
+
+      function selectBit(index, bit) {
+        if (gameCompleted) return;
+
+        userAnswers[index] = bit;
+
+        // Atualizar display do bit
+        const bitDisplay = document.getElementById(`bitDisplay${index}`);
+        bitDisplay.textContent = bit;
+        bitDisplay.className = `bit-display bit-${bit}`;
+
+        // Atualizar botões
+        const meter = document.querySelector(`[data-index="${index}"]`);
+        const buttons = meter.querySelectorAll(".bit-btn");
+        buttons.forEach((btn) => btn.classList.remove("selected"));
+
+        const selectedBtn = meter.querySelector(`.btn-${bit}`);
+        selectedBtn.classList.add("selected");
+
+        // Atualizar estilo do medidor
+        meter.className = `voltage-meter bit-${bit}`;
+
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const answeredCount = Object.keys(userAnswers).length;
+        document.getElementById("answeredCount").textContent = answeredCount;
+      }
+
+      function checkAnswers() {
+        let correctCount = 0;
+        const totalQuestions = voltageData.length;
+
+        voltageData.forEach((data, index) => {
+          const userAnswer = userAnswers[index];
+          const meter = document.querySelector(`[data-index="${index}"]`);
+
+          if (userAnswer !== undefined) {
+            if (userAnswer === data.expected) {
+              correctCount++;
+              // Visual de correto já está aplicado
+            } else {
+              // Adicionar visual de incorreto
+              meter.style.animation = "shake 0.5s ease-in-out";
+              setTimeout(() => {
+                meter.style.animation = "";
+              }, 500);
+            }
+          }
+        });
+
+        // Atualizar contador
+        document.getElementById("correctCount").textContent = correctCount;
+
+        // Mostrar feedback
+        if (Object.keys(userAnswers).length === 0) {
+          showFeedback(
+            "info",
+            "💡 Clique nos botões 0 ou 1 para escolher o bit correspondente a cada voltagem!"
+          );
+        } else if (
+          correctCount === totalQuestions &&
+          Object.keys(userAnswers).length === totalQuestions
+        ) {
+          gameCompleted = true;
+          showFeedback(
+            "success",
+            `🎉 Perfeito! Você entendeu como voltagens são convertidas em bits digitais!`
+          );
+          endGame();
+        } else {
+          const answeredCount = Object.keys(userAnswers).length;
+          if (answeredCount < totalQuestions) {
+            showFeedback(
+              "info",
+              `📝 ${correctCount} de ${answeredCount} respostas estão corretas. Continue!`
+            );
+          } else {
+            showFeedback(
+              "error",
+              `❌ ${correctCount} de ${totalQuestions} respostas estão corretas. Lembre-se: abaixo de 3V = 0, acima de 3V = 1`
+            );
+          }
+        }
+      }
+
+      function showFeedback(type, message) {
+        const feedback = document.getElementById("feedback");
+        feedback.className = `feedback ${type}`;
+        feedback.textContent = message;
+        feedback.style.display = "block";
+
+        setTimeout(() => {
+          if (type !== "success") {
+            feedback.style.display = "none";
+          }
+        }, 4000);
+      }
+
+      function resetGame() {
+        userAnswers = {};
+        gameCompleted = false;
+
+        // Reset todos os medidores
+        document.querySelectorAll(".voltage-meter").forEach((meter) => {
+          meter.className = "voltage-meter";
+
+          const buttons = meter.querySelectorAll(".bit-btn");
+          buttons.forEach((btn) => btn.classList.remove("selected"));
+
+          const index = meter.dataset.index;
+          const bitDisplay = document.getElementById(`bitDisplay${index}`);
+          bitDisplay.textContent = "?";
+          bitDisplay.className = "bit-display";
+        });
+
+        // Reset contadores
+        document.getElementById("answeredCount").textContent = "0";
+        document.getElementById("correctCount").textContent = "0";
+
+        // Esconder feedback e resultados
+        document.getElementById("feedback").style.display = "none";
+        document.getElementById("finalResults").style.display = "none";
+        document.getElementById("nextBtn").style.display = "none";
+      }
+
+      function endGame() {
+        setTimeout(() => {
+          const finalResults = document.getElementById("finalResults");
+          const finalScore = document.getElementById("finalScore");
+          const finalMessage = document.getElementById("finalMessage");
+
+          finalScore.textContent = `6/6 (100%)`;
+          finalMessage.innerHTML = `
+                    🎉 <strong>Excelente!</strong> Você dominou a conversão de voltagens para bits!<br><br>
+                    <em>Agora você entende como computadores interpretam sinais elétricos:</em><br>
+                    • <strong>0V - 2.8V</strong> → Bit 0 (BAIXO/LOW)<br>
+                    • <strong>3.3V - 5V</strong> → Bit 1 (ALTO/HIGH)<br>
+                    • <strong>Limiar: 3V</strong> → Ponto de separação digital<br><br>
+                    <strong>Este é o fundamento de toda computação digital!</strong>
+                `;
+
+          finalResults.style.display = "block";
+          document.getElementById("nextBtn").style.display = "inline-block";
+        }, 1500);
+      }
+
+      // Função global para os botões (necessária para onclick inline)
+      window.selectBit = selectBit;
+
+      // Adicionar dica inicial
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          if (Object.keys(userAnswers).length === 0) {
+            showFeedback(
+              "info",
+              "💡 Dica: Observe a linha amarela nos medidores - ela marca o limiar de 3V. Abaixo = 0, Acima = 1!"
+            );
+          }
+        }, 3000);
+      });
+
+      // Adicionar efeito de shake para respostas incorretas
+      const shakeStyle = document.createElement("style");
+      shakeStyle.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+      document.head.appendChild(shakeStyle);
+    </script>
+  </body>
+</html>

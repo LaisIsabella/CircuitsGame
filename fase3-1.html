@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro Raiders - Fase 3.1</title>
+
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a0d1a 50%,
+          #0d0d0d 100%
+        );
+        color: #f2f2f2;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Mesmo fundo de circuitos */
+      .circuit-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 120%;
+        height: 120%;
+        opacity: 0.06;
+        z-index: -1;
+        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='circuit-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff0077'/%3E%3Cstop offset='50%25' style='stop-color:%236600cc'/%3E%3Cstop offset='100%25' style='stop-color:%23ff0077'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg stroke='url(%23circuit-grad)' stroke-width='1' fill='none'%3E%3Cpath d='M20,20 L80,20 L80,60 L140,60 L140,100'/%3E%3Cpath d='M20,80 L60,80 L60,120 L120,120 L120,180'/%3E%3Cpath d='M180,20 L120,20 L120,40 L60,40 L60,80'/%3E%3Cpath d='M180,80 L140,80 L140,140 L80,140 L80,180'/%3E%3Cpath d='M20,160 L80,160 L80,120 L140,120'/%3E%3Cpath d='M160,160 L120,160 L120,100 L80,100'/%3E%3Cpath d='M180,140 L160,140 L160,180'/%3E%3Cpath d='M40,180 L40,140 L20,140'/%3E%3C/g%3E%3Cg fill='url(%23circuit-grad)'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='80' cy='20' r='2'/%3E%3Ccircle cx='80' cy='60' r='2'/%3E%3Ccircle cx='140' cy='60' r='2'/%3E%3Ccircle cx='140' cy='100' r='2'/%3E%3Ccircle cx='20' cy='80' r='2'/%3E%3Ccircle cx='60' cy='80' r='2'/%3E%3Ccircle cx='60' cy='120' r='2'/%3E%3Ccircle cx='120' cy='120' r='2'/%3E%3Ccircle cx='120' cy='180' r='2'/%3E%3Ccircle cx='180' cy='20' r='2'/%3E%3Ccircle cx='120' cy='20' r='2'/%3E%3Ccircle cx='120' cy='40' r='2'/%3E%3Ccircle cx='60' cy='40' r='2'/%3E%3Ccircle cx='180' cy='80' r='2'/%3E%3Ccircle cx='140' cy='80' r='2'/%3E%3Ccircle cx='140' cy='140' r='2'/%3E%3Ccircle cx='80' cy='140' r='2'/%3E%3Ccircle cx='80' cy='180' r='2'/%3E%3Ccircle cx='20' cy='160' r='2'/%3E%3Ccircle cx='80' cy='160' r='2'/%3E%3Ccircle cx='160' cy='160' r='2'/%3E%3Ccircle cx='120' cy='160' r='2'/%3E%3Ccircle cx='80' cy='100' r='2'/%3E%3Ccircle cx='180' cy='140' r='2'/%3E%3Ccircle cx='160' cy='140' r='2'/%3E%3Ccircle cx='160' cy='180' r='2'/%3E%3Ccircle cx='40' cy='180' r='2'/%3E%3Ccircle cx='40' cy='140' r='2'/%3E%3Ccircle cx='20' cy='140' r='2'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 400px 400px;
+        animation: circuit-flow 60s linear infinite;
+      }
+
+      @keyframes circuit-flow {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 0.06;
+        }
+        25% {
+          opacity: 0.08;
+        }
+        50% {
+          transform: translate(-100px, -100px) rotate(180deg);
+          opacity: 0.06;
+        }
+        75% {
+          opacity: 0.04;
+        }
+        100% {
+          transform: translate(0, 0) rotate(360deg);
+          opacity: 0.06;
+        }
+      }
+
+      /* Container principal */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Header da fase */
+      .phase-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fade-in-down 1s ease-out;
+      }
+
+      .logo {
+        font-family: "Orbitron", monospace;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #ff0077;
+        text-shadow: 0 0 20px rgba(255, 0, 119, 0.8);
+        margin-bottom: 0.5rem;
+      }
+
+      .phase-title {
+        font-size: 1.8rem;
+        color: #d8b4f8;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .phase-description {
+        font-size: 1rem;
+        color: #e0e0e0;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Card do jogo */
+      .game-card {
+        background: rgba(0, 0, 0, 0.85);
+        border: 3px solid #ff0077;
+        border-radius: 25px;
+        padding: 3rem;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 60px rgba(255, 0, 119, 0.4),
+          inset 0 0 60px rgba(255, 0, 119, 0.15);
+        animation: fade-in-up 1s ease-out 0.5s both;
+        position: relative;
+      }
+
+      /* Status do progresso */
+      .progress-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 0, 119, 0.3);
+      }
+
+      .progress-info {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ff0077;
+      }
+
+      .score-info {
+        font-size: 1rem;
+        color: #d8b4f8;
+      }
+
+      /* Área do jogo de correspondência */
+      .matching-game {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+
+      /* Coluna das descrições */
+      .descriptions-column {
+        background: rgba(255, 0, 119, 0.05);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        padding: 2rem;
+      }
+
+      .column-title {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #ff0077;
+        margin-bottom: 2rem;
+        font-family: "Orbitron", monospace;
+      }
+
+      .description-card {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border: 2px solid #555;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        user-select: none;
+      }
+
+      .description-card:hover {
+        border-color: #ff0077;
+        background: linear-gradient(145deg, #2a1a2a, #3a2a3a);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 0, 119, 0.2);
+      }
+
+      .description-card.selected {
+        border-color: #ff0077;
+        background: linear-gradient(145deg, #ff0077, #cc0066);
+        color: white;
+        box-shadow: 0 0 20px rgba(255, 0, 119, 0.4);
+      }
+
+      .description-card.matched {
+        border-color: #4caf50;
+        background: linear-gradient(145deg, #4caf50, #388e3c);
+        color: white;
+        cursor: default;
+        transform: none;
+      }
+
+      .description-number {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        background: #ff0077;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        font-weight: 700;
+        margin-right: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .description-text {
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #e0e0e0;
+      }
+
+      .description-card.selected .description-text,
+      .description-card.matched .description-text {
+        color: white;
+      }
+
+      /* Coluna das portas lógicas */
+      .gates-column {
+        background: rgba(0, 204, 204, 0.05);
+        border: 2px solid #00cccc;
+        border-radius: 20px;
+        padding: 2rem;
+      }
+
+      .gate-card {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border: 2px solid #555;
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        position: relative;
+      }
+
+      .gate-card:hover {
+        border-color: #00cccc;
+        background: linear-gradient(145deg, #1a2a2a, #2a3a3a);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 204, 204, 0.2);
+      }
+
+      .gate-card.available {
+        border-color: #00cccc;
+        background: linear-gradient(145deg, #00cccc, #0099cc);
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 204, 204, 0.4);
+      }
+
+      .gate-card.matched {
+        border-color: #4caf50;
+        background: linear-gradient(145deg, #4caf50, #388e3c);
+        color: white;
+        cursor: default;
+        transform: none;
+      }
+
+      .gate-name {
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 1rem;
+        font-family: "Orbitron", monospace;
+        color: #00cccc;
+      }
+
+      .gate-card.available .gate-name,
+      .gate-card.matched .gate-name {
+        color: white;
+      }
+
+      .gate-symbol {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .gate-explanation {
+        font-size: 0.9rem;
+        color: #ccc;
+        line-height: 1.4;
+      }
+
+      .gate-card.available .gate-explanation,
+      .gate-card.matched .gate-explanation {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      /* Linha de conexão visual */
+      .connection-line {
+        position: absolute;
+        height: 3px;
+        background: linear-gradient(90deg, #ff0077, #00cccc);
+        z-index: 10;
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(255, 0, 119, 0.5);
+        display: none;
+        animation: draw-line 0.5s ease-out;
+      }
+
+      @keyframes draw-line {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      /* Botões de ação */
+      .game-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, #ff0077, #cc0066);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 0, 119, 0.4);
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 0, 119, 0.6);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #ff0077;
+        border: 2px solid #ff0077;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 0, 119, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* Feedback */
+      .feedback {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+        animation: fade-in 0.5s ease-out;
+      }
+
+      .feedback.success {
+        background: rgba(76, 175, 80, 0.1);
+        border: 2px solid #4caf50;
+        color: #4caf50;
+      }
+
+      .feedback.error {
+        background: rgba(244, 67, 54, 0.1);
+        border: 2px solid #f44336;
+        color: #f44336;
+      }
+
+      /* Resultados finais */
+      .final-results {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .final-score {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #ff0077;
+        margin-bottom: 1rem;
+      }
+
+      .final-message {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+      }
+
+      /* Navegação */
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        animation: fade-in 1s ease-out 1s both;
+      }
+
+      .nav-btn {
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        color: #ff0077;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 0, 119, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* Animações */
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .game-card {
+          padding: 2rem;
+        }
+
+        .matching-game {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .navigation {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="circuit-bg"></div>
+
+    <div class="container">
+      <header class="phase-header">
+        <h1 class="logo">🕹️ RETRO RAIDERS</h1>
+        <h2 class="phase-title">FASE 3.1 – Portas Lógicas: Conceitos</h2>
+        <p class="phase-description">
+          Conecte cada descrição com a porta lógica correta! Clique em uma
+          descrição à esquerda e depois na porta correspondente à direita.
+        </p>
+      </header>
+
+      <div class="game-card">
+        <div class="progress-status">
+          <div class="progress-info">
+            Correspondências: <span id="matchCount">0</span> de 4
+          </div>
+          <div class="score-info">Tentativas: <span id="attempts">0</span></div>
+        </div>
+
+        <div class="matching-game">
+          <!-- Coluna das descrições -->
+          <div class="descriptions-column">
+            <h3 class="column-title">📝 DESCRIÇÕES</h3>
+
+            <div class="description-card" data-id="1">
+              <span class="description-number">1</span>
+              <div class="description-text">
+                Retorna verdadeiro somente se as duas entradas forem verdadeiras
+              </div>
+            </div>
+
+            <div class="description-card" data-id="2">
+              <span class="description-number">2</span>
+              <div class="description-text">
+                Retorna verdadeiro se pelo menos uma das entradas for verdadeira
+              </div>
+            </div>
+
+            <div class="description-card" data-id="3">
+              <span class="description-number">3</span>
+              <div class="description-text">
+                Inverte o valor lógico da entrada (transforma 0 em 1 e
+                vice-versa)
+              </div>
+            </div>
+
+            <div class="description-card" data-id="4">
+              <span class="description-number">4</span>
+              <div class="description-text">
+                Retorna verdadeiro se apenas uma das entradas for verdadeira (ou
+                exclusivo)
+              </div>
+            </div>
+          </div>
+
+          <!-- Coluna das portas lógicas -->
+          <div class="gates-column">
+            <h3 class="column-title">⚡ PORTAS LÓGICAS</h3>
+
+            <div class="gate-card" data-gate="AND">
+              <div class="gate-name">AND</div>
+              <div class="gate-symbol">∧</div>
+              <div class="gate-explanation">
+                Porta "E" - ambas condições devem ser atendidas
+              </div>
+            </div>
+
+            <div class="gate-card" data-gate="OR">
+              <div class="gate-name">OR</div>
+              <div class="gate-symbol">∨</div>
+              <div class="gate-explanation">
+                Porta "OU" - pelo menos uma condição deve ser atendida
+              </div>
+            </div>
+
+            <div class="gate-card" data-gate="NOT">
+              <div class="gate-name">NOT</div>
+              <div class="gate-symbol">¬</div>
+              <div class="gate-explanation">
+                Porta "NÃO" - inverte o sinal de entrada
+              </div>
+            </div>
+
+            <div class="gate-card" data-gate="XOR">
+              <div class="gate-name">XOR</div>
+              <div class="gate-symbol">⊕</div>
+              <div class="gate-explanation">
+                Porta "OU Exclusivo" - apenas uma condição por vez
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="game-actions">
+          <button class="btn btn-secondary" id="resetBtn">🔄 Reiniciar</button>
+          <button class="btn btn-primary" id="checkBtn" disabled>
+            ✓ Verificar Todas
+          </button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="final-results" id="finalResults">
+          <div class="final-score" id="finalScore">4/4</div>
+          <div class="final-message" id="finalMessage">
+            <!-- Mensagem final -->
+          </div>
+        </div>
+      </div>
+
+      <nav class="navigation">
+        <a href="/fase3.html" class="nav-btn">← Fase Anterior</a>
+        <a
+          href="/fase3-2.html"
+          class="nav-btn"
+          id="nextBtn"
+          style="display: none"
+          >Fase 3.2 →</a
+        >
+      </nav>
+    </div>
+
+    <script>
+      // Correspondências corretas
+      const correctMatches = {
+        1: "AND", // Somente se as duas forem verdadeiras
+        2: "OR", // Pelo menos uma for verdadeira
+        3: "NOT", // Inverte o valor
+        4: "XOR", // Apenas uma for verdadeira
+      };
+
+      let selectedDescription = null;
+      let matches = {};
+      let attempts = 0;
+
+      // Event listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        setupEventListeners();
+      });
+
+      function setupEventListeners() {
+        // Descrições
+        document.querySelectorAll(".description-card").forEach((card) => {
+          card.addEventListener("click", function () {
+            if (this.classList.contains("matched")) return;
+            selectDescription(this);
+          });
+        });
+
+        // Portas lógicas
+        document.querySelectorAll(".gate-card").forEach((card) => {
+          card.addEventListener("click", function () {
+            if (this.classList.contains("matched")) return;
+            selectGate(this);
+          });
+        });
+
+        // Botões
+        document
+          .getElementById("resetBtn")
+          .addEventListener("click", resetGame);
+        document
+          .getElementById("checkBtn")
+          .addEventListener("click", checkAllMatches);
+      }
+
+      function selectDescription(card) {
+        // Remove seleção anterior das descrições
+        document.querySelectorAll(".description-card").forEach((c) => {
+          c.classList.remove("selected");
+        });
+
+        // Seleciona nova descrição
+        card.classList.add("selected");
+        selectedDescription = parseInt(card.dataset.id);
+
+        // Destaca portas disponíveis
+        updateGateAvailability();
+      }
+
+      function selectGate(card) {
+        if (!selectedDescription) {
+          showFeedback(false, "Primeiro selecione uma descrição à esquerda!");
+          return;
+        }
+
+        const gate = card.dataset.gate;
+        attempts++;
+        document.getElementById("attempts").textContent = attempts;
+
+        // Criar correspondência
+        matches[selectedDescription] = gate;
+
+        // Verificar se está correto
+        if (correctMatches[selectedDescription] === gate) {
+          // Correto!
+          markAsMatched(selectedDescription, gate);
+          showFeedback(
+            true,
+            `✅ Correto! Descrição ${selectedDescription} = ${gate}`
+          );
+
+          updateProgress();
+
+          if (Object.keys(matches).length === 4) {
+            setTimeout(endGame, 1500);
+          }
+        } else {
+          // Incorreto
+          showFeedback(false, `❌ Incorreto! Tente novamente.`);
+          delete matches[selectedDescription];
+        }
+
+        // Reset seleções
+        resetSelections();
+      }
+
+      function markAsMatched(descId, gate) {
+        // Marcar descrição como matched
+        const descCard = document.querySelector(`[data-id="${descId}"]`);
+        descCard.classList.remove("selected");
+        descCard.classList.add("matched");
+
+        // Marcar porta como matched
+        const gateCard = document.querySelector(`[data-gate="${gate}"]`);
+        gateCard.classList.remove("available");
+        gateCard.classList.add("matched");
+      }
+
+      function updateGateAvailability() {
+        document.querySelectorAll(".gate-card").forEach((card) => {
+          if (!card.classList.contains("matched")) {
+            card.classList.add("available");
+          }
+        });
+      }
+
+      function resetSelections() {
+        selectedDescription = null;
+
+        document.querySelectorAll(".description-card").forEach((card) => {
+          if (!card.classList.contains("matched")) {
+            card.classList.remove("selected");
+          }
+        });
+
+        document.querySelectorAll(".gate-card").forEach((card) => {
+          if (!card.classList.contains("matched")) {
+            card.classList.remove("available");
+          }
+        });
+      }
+
+      function updateProgress() {
+        const matchCount = Object.keys(matches).length;
+        document.getElementById("matchCount").textContent = matchCount;
+
+        const checkBtn = document.getElementById("checkBtn");
+        checkBtn.disabled = matchCount < 4;
+      }
+
+      function showFeedback(isCorrect, message) {
+        const feedback = document.getElementById("feedback");
+        feedback.className = `feedback ${isCorrect ? "success" : "error"}`;
+        feedback.textContent = message;
+        feedback.style.display = "block";
+
+        setTimeout(() => {
+          feedback.style.display = "none";
+        }, 2000);
+      }
+
+      function checkAllMatches() {
+        let correctCount = 0;
+
+        for (let descId in matches) {
+          if (correctMatches[descId] === matches[descId]) {
+            correctCount++;
+          }
+        }
+
+        if (correctCount === 4) {
+          endGame();
+        } else {
+          showFeedback(
+            false,
+            `Você tem ${correctCount} de 4 correspondências corretas. Continue tentando!`
+          );
+        }
+      }
+
+      function endGame() {
+        const percentage = Math.round((Object.keys(matches).length / 4) * 100);
+
+        // Esconder área do jogo
+        document.querySelector(".matching-game").style.display = "none";
+        document.querySelector(".game-actions").style.display = "none";
+
+        // Mostrar resultados
+        const finalResults = document.getElementById("finalResults");
+        const finalScore = document.getElementById("finalScore");
+        const finalMessage = document.getElementById("finalMessage");
+
+        finalScore.textContent = `4/4 (100%)`;
+        finalMessage.innerHTML = `
+                🎉 <strong>Excelente!</strong> Você conectou todas as portas lógicas corretamente!<br><br>
+                <em>Agora você entende os conceitos básicos: AND, OR, NOT e XOR. Pronto para as tabelas verdade!</em><br><br>
+                <strong>Tentativas usadas:</strong> ${attempts}
+            `;
+
+        document.getElementById("nextBtn").style.display = "inline-block";
+        finalResults.style.display = "block";
+      }
+
+      function resetGame() {
+        // Reset variáveis
+        selectedDescription = null;
+        matches = {};
+        attempts = 0;
+
+        // Reset UI
+        document.querySelectorAll(".description-card").forEach((card) => {
+          card.classList.remove("selected", "matched");
+        });
+
+        document.querySelectorAll(".gate-card").forEach((card) => {
+          card.classList.remove("available", "matched");
+        });
+
+        // Reset contadores
+        document.getElementById("matchCount").textContent = "0";
+        document.getElementById("attempts").textContent = "0";
+        document.getElementById("checkBtn").disabled = true;
+
+        // Esconder feedback e resultados
+        document.getElementById("feedback").style.display = "none";
+        document.getElementById("finalResults").style.display = "none";
+        document.getElementById("nextBtn").style.display = "none";
+
+        // Mostrar área do jogo
+        document.querySelector(".matching-game").style.display = "grid";
+        document.querySelector(".game-actions").style.display = "flex";
+      }
+    </script>
+  </body>
+</html>

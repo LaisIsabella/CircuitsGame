@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro Raiders - Fase 5</title>
+
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a0d1a 50%,
+          #0d0d0d 100%
+        );
+        color: #f2f2f2;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Mesmo fundo de circuitos */
+      .circuit-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 120%;
+        height: 120%;
+        opacity: 0.06;
+        z-index: -1;
+        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='circuit-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff0077'/%3E%3Cstop offset='50%25' style='stop-color:%236600cc'/%3E%3Cstop offset='100%25' style='stop-color:%23ff0077'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg stroke='url(%23circuit-grad)' stroke-width='1' fill='none'%3E%3Cpath d='M20,20 L80,20 L80,60 L140,60 L140,100'/%3E%3Cpath d='M20,80 L60,80 L60,120 L120,120 L120,180'/%3E%3Cpath d='M180,20 L120,20 L120,40 L60,40 L60,80'/%3E%3Cpath d='M180,80 L140,80 L140,140 L80,140 L80,180'/%3E%3Cpath d='M20,160 L80,160 L80,120 L140,120'/%3E%3Cpath d='M160,160 L120,160 L120,100 L80,100'/%3E%3Cpath d='M180,140 L160,140 L160,180'/%3E%3Cpath d='M40,180 L40,140 L20,140'/%3E%3C/g%3E%3Cg fill='url(%23circuit-grad)'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='80' cy='20' r='2'/%3E%3Ccircle cx='80' cy='60' r='2'/%3E%3Ccircle cx='140' cy='60' r='2'/%3E%3Ccircle cx='140' cy='100' r='2'/%3E%3Ccircle cx='20' cy='80' r='2'/%3E%3Ccircle cx='60' cy='80' r='2'/%3E%3Ccircle cx='60' cy='120' r='2'/%3E%3Ccircle cx='120' cy='120' r='2'/%3E%3Ccircle cx='120' cy='180' r='2'/%3E%3Ccircle cx='180' cy='20' r='2'/%3E%3Ccircle cx='120' cy='20' r='2'/%3E%3Ccircle cx='120' cy='40' r='2'/%3E%3Ccircle cx='60' cy='40' r='2'/%3E%3Ccircle cx='180' cy='80' r='2'/%3E%3Ccircle cx='140' cy='80' r='2'/%3E%3Ccircle cx='140' cy='140' r='2'/%3E%3Ccircle cx='80' cy='140' r='2'/%3E%3Ccircle cx='80' cy='180' r='2'/%3E%3Ccircle cx='20' cy='160' r='2'/%3E%3Ccircle cx='80' cy='160' r='2'/%3E%3Ccircle cx='160' cy='160' r='2'/%3E%3Ccircle cx='120' cy='160' r='2'/%3E%3Ccircle cx='80' cy='100' r='2'/%3E%3Ccircle cx='180' cy='140' r='2'/%3E%3Ccircle cx='160' cy='140' r='2'/%3E%3Ccircle cx='160' cy='180' r='2'/%3E%3Ccircle cx='40' cy='180' r='2'/%3E%3Ccircle cx='40' cy='140' r='2'/%3E%3Ccircle cx='20' cy='140' r='2'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 400px 400px;
+        animation: circuit-flow 60s linear infinite;
+      }
+
+      @keyframes circuit-flow {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 0.06;
+        }
+        25% {
+          opacity: 0.08;
+        }
+        50% {
+          transform: translate(-100px, -100px) rotate(180deg);
+          opacity: 0.06;
+        }
+        75% {
+          opacity: 0.04;
+        }
+        100% {
+          transform: translate(0, 0) rotate(360deg);
+          opacity: 0.06;
+        }
+      }
+
+      /* Container principal */
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Header da fase */
+      .phase-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fade-in-down 1s ease-out;
+      }
+
+      .logo {
+        font-family: "Orbitron", monospace;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #ff0077;
+        text-shadow: 0 0 20px rgba(255, 0, 119, 0.8);
+        margin-bottom: 0.5rem;
+      }
+
+      .phase-title {
+        font-size: 1.8rem;
+        color: #d8b4f8;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .phase-description {
+        font-size: 1rem;
+        color: #e0e0e0;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Card do jogo */
+      .game-card {
+        background: rgba(0, 0, 0, 0.85);
+        border: 3px solid #ff0077;
+        border-radius: 25px;
+        padding: 3rem;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 60px rgba(255, 0, 119, 0.4),
+          inset 0 0 60px rgba(255, 0, 119, 0.15);
+        animation: fade-in-up 1s ease-out 0.5s both;
+        position: relative;
+      }
+
+      /* Status do progresso */
+      .progress-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 0, 119, 0.3);
+      }
+
+      .progress-info {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ff0077;
+      }
+
+      .score-info {
+        font-size: 1rem;
+        color: #d8b4f8;
+      }
+
+      /* Área de explicação */
+      .explanation-area {
+        background: rgba(33, 150, 243, 0.1);
+        border: 2px solid #2196f3;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .explanation-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2196f3;
+        margin-bottom: 1rem;
+        font-family: "Orbitron", monospace;
+        text-align: center;
+      }
+
+      .binary-example {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .example-card {
+        background: rgba(33, 150, 243, 0.1);
+        border: 1px solid rgba(33, 150, 243, 0.3);
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .example-decimal {
+        font-size: 1.5rem;
+        color: #2196f3;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .example-binary {
+        font-size: 1.2rem;
+        color: #e0e0e0;
+        font-family: "Orbitron", monospace;
+      }
+
+      /* Grid de conversores */
+      .conversion-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      /* Cada conversor */
+      .binary-converter {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .binary-converter.completed {
+        border-color: #4caf50;
+        background: linear-gradient(145deg, #1a2a1a, #2a3a2a);
+      }
+
+      .binary-converter.incorrect {
+        border-color: #f44336;
+        background: linear-gradient(145deg, #2a1a1a, #3a2a2a);
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        75% {
+          transform: translateX(10px);
+        }
+      }
+
+      .decimal-display {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .decimal-number {
+        font-size: 3rem;
+        font-weight: 900;
+        color: #2196f3;
+        font-family: "Orbitron", monospace;
+        text-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
+      }
+
+      .decimal-label {
+        font-size: 1rem;
+        color: #d8b4f8;
+        margin-top: 0.5rem;
+      }
+
+      /* Visualizador de potências de 2 */
+      .powers-visualizer {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .powers-title {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #ffc107;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .powers-grid {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .power-bit {
+        background: #333;
+        border: 2px solid #555;
+        border-radius: 8px;
+        padding: 0.5rem;
+        text-align: center;
+        min-width: 50px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .power-bit.active {
+        background: linear-gradient(145deg, #ff0077, #cc0066);
+        border-color: #ff0088;
+        color: white;
+        box-shadow: 0 0 15px rgba(255, 0, 119, 0.5);
+      }
+
+      .power-value {
+        font-size: 0.8rem;
+        color: #ffc107;
+        font-weight: 700;
+      }
+
+      .bit-value {
+        font-size: 1.2rem;
+        font-family: "Orbitron", monospace;
+        font-weight: 900;
+        margin-top: 0.2rem;
+      }
+
+      /* Área de resposta */
+      .answer-area {
+        text-align: center;
+      }
+
+      .binary-input {
+        background: rgba(0, 0, 0, 0.5);
+        border: 3px solid #555;
+        border-radius: 15px;
+        padding: 1rem 1.5rem;
+        font-size: 1.8rem;
+        font-family: "Orbitron", monospace;
+        color: #e0e0e0;
+        text-align: center;
+        width: 100%;
+        max-width: 200px;
+        transition: all 0.3s ease;
+      }
+
+      .binary-input:focus {
+        outline: none;
+        border-color: #ff0077;
+        box-shadow: 0 0 20px rgba(255, 0, 119, 0.3);
+        color: #fff;
+      }
+
+      .binary-input.correct {
+        border-color: #4caf50;
+        background: rgba(76, 175, 80, 0.1);
+        color: #4caf50;
+      }
+
+      .binary-input.incorrect {
+        border-color: #f44336;
+        background: rgba(244, 67, 54, 0.1);
+        color: #f44336;
+      }
+
+      .input-label {
+        font-size: 1rem;
+        color: #d8b4f8;
+        margin-top: 1rem;
+      }
+
+      /* Botão de dica */
+      .hint-btn {
+        background: transparent;
+        border: 2px solid #ffc107;
+        color: #ffc107;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .hint-btn:hover {
+        background: rgba(255, 193, 7, 0.1);
+        transform: translateY(-2px);
+      }
+
+      /* Botões de ação */
+      .game-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, #ff0077, #cc0066);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 0, 119, 0.4);
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 0, 119, 0.6);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #ff0077;
+        border: 2px solid #ff0077;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 0, 119, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* Feedback */
+      .feedback {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+        animation: fade-in 0.5s ease-out;
+      }
+
+      .feedback.success {
+        background: rgba(76, 175, 80, 0.1);
+        border: 2px solid #4caf50;
+        color: #4caf50;
+      }
+
+      .feedback.error {
+        background: rgba(244, 67, 54, 0.1);
+        border: 2px solid #f44336;
+        color: #f44336;
+      }
+
+      .feedback.info {
+        background: rgba(33, 150, 243, 0.1);
+        border: 2px solid #2196f3;
+        color: #2196f3;
+      }
+
+      /* Resultados finais */
+      .final-results {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .final-score {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #ff0077;
+        margin-bottom: 1rem;
+      }
+
+      .final-message {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+      }
+
+      /* Navegação */
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        animation: fade-in 1s ease-out 1s both;
+      }
+
+      .nav-btn {
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        color: #ff0077;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 0, 119, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* Animações */
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .game-card {
+          padding: 2rem;
+        }
+
+        .conversion-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .powers-grid {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .navigation {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="circuit-bg"></div>
+
+    <div class="container">
+      <header class="phase-header">
+        <h1 class="logo">🕹️ RETRO RAIDERS</h1>
+        <h2 class="phase-title">FASE 5 – Representação Binária</h2>
+        <p class="phase-description">
+          Aprenda como números decimais são convertidos para binário - a
+          linguagem fundamental dos computadores! Use o visualizador de
+          potências de 2 para entender o processo.
+        </p>
+      </header>
+
+      <div class="game-card">
+        <div class="progress-status">
+          <div class="progress-info">
+            Conversões: <span id="completedCount">0</span> de 5
+          </div>
+          <div class="score-info">
+            Acertos: <span id="correctCount">0</span>
+          </div>
+        </div>
+
+        <div class="explanation-area">
+          <div class="explanation-title">
+            💡 Como Funciona o Sistema Binário
+          </div>
+          <div style="text-align: center; color: #e0e0e0; margin-bottom: 1rem">
+            No sistema binário, cada posição representa uma potência de 2. Some
+            as potências onde há "1" para obter o valor decimal.
+          </div>
+          <div class="binary-example">
+            <div class="example-card">
+              <div class="example-decimal">1 = 2⁰</div>
+              <div class="example-binary">1</div>
+            </div>
+            <div class="example-card">
+              <div class="example-decimal">4 = 2²</div>
+              <div class="example-binary">100</div>
+            </div>
+            <div class="example-card">
+              <div class="example-decimal">6 = 4+2</div>
+              <div class="example-binary">110</div>
+            </div>
+            <div class="example-card">
+              <div class="example-decimal">9 = 8+1</div>
+              <div class="example-binary">1001</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conversion-grid" id="conversionGrid">
+          <!-- Conversores serão inseridos aqui -->
+        </div>
+
+        <div class="game-actions">
+          <button class="btn btn-secondary" id="resetBtn">🔄 Reiniciar</button>
+          <button class="btn btn-primary" id="checkBtn">
+            ✓ Verificar Todas
+          </button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="final-results" id="finalResults">
+          <div class="final-score" id="finalScore">5/5</div>
+          <div class="final-message" id="finalMessage">
+            <!-- Mensagem final -->
+          </div>
+        </div>
+      </div>
+
+      <nav class="navigation">
+        <a href="/fase4.html" class="nav-btn">← Fase Anterior</a>
+        <a href="/fase6.html" class="nav-btn" id="nextBtn" style="display: none"
+          >Próxima Fase →</a
+        >
+      </nav>
+    </div>
+
+    <script>
+      // Dados dos números para conversão
+      const numbers = [2, 5, 7, 10, 15];
+      const correctAnswers = ["10", "101", "111", "1010", "1111"];
+
+      let userAnswers = {};
+      let gameCompleted = false;
+
+      // Inicializar jogo
+      document.addEventListener("DOMContentLoaded", function () {
+        createConverters();
+        setupEventListeners();
+        updateProgress();
+      });
+
+      function createConverters() {
+        const container = document.getElementById("conversionGrid");
+
+        numbers.forEach((number, index) => {
+          const converter = document.createElement("div");
+          converter.className = "binary-converter";
+          converter.dataset.index = index;
+
+          // Calcular potências de 2 necessárias para este número
+          const powers = getPowersOfTwo(number);
+
+          converter.innerHTML = `
+                    <div class="decimal-display">
+                        <div class="decimal-number">${number}</div>
+                        <div class="decimal-label">Decimal</div>
+                    </div>
+                    
+                    <div class="powers-visualizer">
+                        <div class="powers-title">Potências de 2 (clique para ativar/desativar)</div>
+                        <div class="powers-grid" id="powersGrid${index}">
+                            ${generatePowersHTML(powers, number)}
+                        </div>
+                    </div>
+                    
+                    <div class="answer-area">
+                        <input type="text" class="binary-input" id="input${index}" 
+                               placeholder="?" maxlength="8" data-index="${index}">
+                        <div class="input-label">Binário</div>
+                        <button class="hint-btn" onclick="showHint(${index})">💡 Dica</button>
+                    </div>
+                `;
+
+          container.appendChild(converter);
+        });
+      }
+
+      function getPowersOfTwo(number) {
+        // Determinar quantos bits precisamos (até a maior potência de 2 ≤ number)
+        let maxPower = 0;
+        while (Math.pow(2, maxPower + 1) <= number) {
+          maxPower++;
+        }
+
+        // Adicionar algumas potências extras para contexto
+        return Math.max(4, maxPower + 1);
+      }
+
+      function generatePowersHTML(maxPower, targetNumber) {
+        let html = "";
+        for (let i = maxPower; i >= 0; i--) {
+          const value = Math.pow(2, i);
+          const isActive = (targetNumber & value) !== 0; // Bit masking para verificar se está ativo
+          html += `
+                    <div class="power-bit ${isActive ? "active" : ""}" 
+                         data-power="${i}" data-value="${value}"
+                         onclick="togglePowerBit(this, ${Math.floor(
+                           targetNumber / numbers.length
+                         )})">
+                        <div class="power-value">2^${i}=${value}</div>
+                        <div class="bit-value">${isActive ? "1" : "0"}</div>
+                    </div>
+                `;
+        }
+        return html;
+      }
+
+      function setupEventListeners() {
+        // Event listeners para os inputs
+        document.querySelectorAll(".binary-input").forEach((input) => {
+          input.addEventListener("input", function () {
+            const index = parseInt(this.dataset.index);
+            const value = this.value.trim();
+
+            // Permitir apenas 0 e 1
+            this.value = value.replace(/[^01]/g, "");
+
+            if (this.value) {
+              userAnswers[index] = this.value;
+            } else {
+              delete userAnswers[index];
+            }
+
+            updateProgress();
+            validateInput(this, index);
+          });
+        });
+
+        // Botões
+        document
+          .getElementById("resetBtn")
+          .addEventListener("click", resetGame);
+        document
+          .getElementById("checkBtn")
+          .addEventListener("click", checkAllAnswers);
+      }
+
+      function togglePowerBit(element, converterIndex) {
+        // Esta é uma visualização educativa - não afeta o jogo
+        element.classList.toggle("active");
+        const bitValue = element.querySelector(".bit-value");
+        bitValue.textContent = element.classList.contains("active") ? "1" : "0";
+
+        // Calcular o valor resultante
+        const powersGrid = element.parentElement;
+        const activeBits = powersGrid.querySelectorAll(".power-bit.active");
+        let total = 0;
+        activeBits.forEach((bit) => {
+          total += parseInt(bit.dataset.value);
+        });
+
+        // Mostrar dica visual
+        showFeedback("info", `💡 Soma das potências ativas: ${total}`, 2000);
+      }
+
+      function validateInput(input, index) {
+        const userAnswer = input.value;
+        const correctAnswer = correctAnswers[index];
+
+        // Reset classes
+        input.classList.remove("correct", "incorrect");
+
+        if (userAnswer && userAnswer === correctAnswer) {
+          input.classList.add("correct");
+          const converter = document.querySelector(`[data-index="${index}"]`);
+          converter.classList.add("completed");
+        } else if (userAnswer && userAnswer !== correctAnswer) {
+          input.classList.add("incorrect");
+        }
+      }
+
+      function showHint(index) {
+        const number = numbers[index];
+        const binary = correctAnswers[index];
+
+        // Mostrar processo de conversão
+        let process = `💡 Para converter ${number} para binário:\n`;
+        let remaining = number;
+        let powers = [];
+
+        // Encontrar as potências de 2
+        for (let i = 10; i >= 0; i--) {
+          const power = Math.pow(2, i);
+          if (remaining >= power) {
+            powers.push(`2^${i} = ${power}`);
+            remaining -= power;
+          }
+        }
+
+        process += `Decomposição: ${number} = ${powers.join(" + ")}\n`;
+        process += `Resposta: ${binary}`;
+
+        showFeedback("info", process, 4000);
+      }
+
+      function updateProgress() {
+        const completedCount = Object.keys(userAnswers).length;
+        document.getElementById("completedCount").textContent = completedCount;
+      }
+
+      function checkAllAnswers() {
+        let correctCount = 0;
+        const totalQuestions = numbers.length;
+
+        numbers.forEach((number, index) => {
+          const userAnswer = userAnswers[index];
+          const correctAnswer = correctAnswers[index];
+          const converter = document.querySelector(`[data-index="${index}"]`);
+          const input = document.getElementById(`input${index}`);
+
+          if (userAnswer !== undefined) {
+            if (userAnswer === correctAnswer) {
+              correctCount++;
+              converter.classList.remove("incorrect");
+              converter.classList.add("completed");
+              input.classList.remove("incorrect");
+              input.classList.add("correct");
+            } else {
+              converter.classList.remove("completed");
+              converter.classList.add("incorrect");
+              input.classList.remove("correct");
+              input.classList.add("incorrect");
+            }
+          }
+        });
+
+        // Atualizar contador
+        document.getElementById("correctCount").textContent = correctCount;
+
+        // Mostrar feedback
+        if (Object.keys(userAnswers).length === 0) {
+          showFeedback(
+            "info",
+            "💡 Digite os valores binários nos campos de resposta!"
+          );
+        } else if (
+          correctCount === totalQuestions &&
+          Object.keys(userAnswers).length === totalQuestions
+        ) {
+          gameCompleted = true;
+          showFeedback(
+            "success",
+            `🎉 Perfeito! Você dominou a conversão decimal-binário!`
+          );
+          endGame();
+        } else {
+          const answeredCount = Object.keys(userAnswers).length;
+          if (answeredCount < totalQuestions) {
+            showFeedback(
+              "info",
+              `📝 ${correctCount} de ${answeredCount} conversões estão corretas. Continue!`
+            );
+          } else {
+            showFeedback(
+              "error",
+              `❌ ${correctCount} de ${totalQuestions} conversões estão corretas. Use as dicas para ajudar!`
+            );
+          }
+        }
+      }
+
+      function showFeedback(type, message, duration = 4000) {
+        const feedback = document.getElementById("feedback");
+        feedback.className = `feedback ${type}`;
+        feedback.textContent = message;
+        feedback.style.display = "block";
+
+        setTimeout(() => {
+          if (type !== "success") {
+            feedback.style.display = "none";
+          }
+        }, duration);
+      }
+
+      function resetGame() {
+        userAnswers = {};
+        gameCompleted = false;
+
+        // Reset todos os inputs e conversores
+        document.querySelectorAll(".binary-input").forEach((input) => {
+          input.value = "";
+          input.classList.remove("correct", "incorrect");
+        });
+
+        document.querySelectorAll(".binary-converter").forEach((converter) => {
+          converter.classList.remove("completed", "incorrect");
+        });
+
+        // Reset contadores
+        document.getElementById("completedCount").textContent = "0";
+        document.getElementById("correctCount").textContent = "0";
+
+        // Esconder feedback e resultados
+        document.getElementById("feedback").style.display = "none";
+        document.getElementById("finalResults").style.display = "none";
+        document.getElementById("nextBtn").style.display = "none";
+      }
+
+      function endGame() {
+        setTimeout(() => {
+          const finalResults = document.getElementById("finalResults");
+          const finalScore = document.getElementById("finalScore");
+          const finalMessage = document.getElementById("finalMessage");
+
+          finalScore.textContent = `5/5 (100%)`;
+          finalMessage.innerHTML = `
+                    🎉 <strong>Excelente trabalho!</strong> Você dominou a representação binária!<br><br>
+                    <em>Agora você entende como computadores representam números:</em><br>
+                    • <strong>Sistema Binário</strong>: Base 2 (apenas 0 e 1)<br>
+                    • <strong>Potências de 2</strong>: Cada posição vale 2^n<br>
+                    • <strong>Conversão</strong>: Soma das potências ativas<br><br>
+                    <strong>Esta é a base de toda computação digital!</strong><br>
+                    Próximo: Código de Máquina - como instruções são codificadas!
+                `;
+
+          finalResults.style.display = "block";
+          document.getElementById("nextBtn").style.display = "inline-block";
+        }, 1500);
+      }
+
+      // Funções globais para onclick
+      window.togglePowerBit = togglePowerBit;
+      window.showHint = showHint;
+
+      // Dica inicial
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          if (Object.keys(userAnswers).length === 0) {
+            showFeedback(
+              "info",
+              "💡 Dica: Use o visualizador de potências de 2 para entender a conversão. Clique nos bits para experimentar!",
+              5000
+            );
+          }
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>
