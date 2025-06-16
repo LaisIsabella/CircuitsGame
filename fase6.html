@@ -122,250 +122,282 @@
           inset 0 0 60px rgba(255, 0, 119, 0.15);
         animation: fade-in-up 1s ease-out 0.5s both;
         position: relative;
-      }
-
-      /* Status do progresso */
-      .progress-status {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 3rem;
         align-items: center;
-        margin-bottom: 2rem;
-        padding: 1rem 2rem;
-        background: rgba(255, 0, 119, 0.1);
-        border-radius: 15px;
-        border: 1px solid rgba(255, 0, 119, 0.3);
       }
 
-      .progress-info {
-        font-size: 1.1rem;
-        font-weight: 600;
+      /* Área principal do jogo */
+      .game-content {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Área da imagem */
+      .image-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .algorithm-diagram {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        border-radius: 15px;
+        border: 3px solid rgba(255, 0, 119, 0.3);
+        box-shadow: 0 0 30px rgba(255, 0, 119, 0.2);
+        transition: all 0.3s ease;
+        animation: float-image 6s ease-in-out infinite;
+      }
+
+      .algorithm-diagram:hover {
+        border-color: rgba(255, 0, 119, 0.6);
+        box-shadow: 0 0 40px rgba(255, 0, 119, 0.4);
+        transform: scale(1.02);
+      }
+
+      @keyframes float-image {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .image-caption {
+        text-align: center;
+        color: #d8b4f8;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        max-width: 300px;
+      }
+
+      .image-caption strong {
         color: #ff0077;
       }
 
-      .score-info {
+      /* Área do algoritmo */
+      .algorithm-section {
+        margin-bottom: 3rem;
+      }
+
+      .algorithm-title {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #ff0077;
+        margin-bottom: 1rem;
+        font-family: "Orbitron", monospace;
+      }
+
+      .algorithm-description {
+        text-align: center;
         font-size: 1rem;
+        color: #e0e0e0;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+
+      /* Área de sequência do algoritmo */
+      .algorithm-builder {
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px dashed #ff0077;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2.5rem;
+        min-height: 400px;
+        transition: all 0.3s ease;
+      }
+
+      .algorithm-builder.drag-over {
+        background: rgba(255, 0, 119, 0.2);
+        border-color: #ff0088;
+        box-shadow: 0 0 20px rgba(255, 0, 119, 0.3);
+      }
+
+      .algorithm-builder.complete {
+        background: rgba(76, 175, 80, 0.1);
+        border-color: #4caf50;
+        border-style: solid;
+      }
+
+      .builder-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .builder-title {
+        font-size: 1.1rem;
+        color: #ff0077;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .builder-subtitle {
+        font-size: 0.9rem;
         color: #d8b4f8;
       }
 
-      /* Área de explicação */
-      .explanation-area {
-        background: rgba(0, 204, 204, 0.1);
-        border: 2px solid #00cccc;
-        border-radius: 20px;
-        padding: 2rem;
-        margin-bottom: 3rem;
-        text-align: center;
+      .algorithm-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-height: 300px;
       }
 
-      .explanation-title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #00cccc;
-        margin-bottom: 1rem;
-        font-family: "Orbitron", monospace;
-      }
-
-      .explanation-text {
-        font-size: 1rem;
-        color: #e0e0e0;
-        line-height: 1.6;
-        margin-bottom: 1rem;
-      }
-
-      .threshold-info {
-        background: rgba(255, 193, 7, 0.1);
-        border: 2px solid #ffc107;
+      .step-placeholder {
+        background: rgba(255, 0, 119, 0.05);
+        border: 2px dashed rgba(255, 0, 119, 0.3);
         border-radius: 10px;
         padding: 1rem;
-        margin-top: 1rem;
+        text-align: center;
+        color: #888;
+        font-style: italic;
+        transition: all 0.3s ease;
       }
 
-      .threshold-text {
-        color: #ffc107;
-        font-weight: 600;
+      .step-placeholder.active {
+        border-color: #ff0077;
+        background: rgba(255, 0, 119, 0.1);
+        color: #ff0077;
+      }
+
+      /* Etapas disponíveis */
+      .available-steps {
+        margin-bottom: 2rem;
+      }
+
+      .steps-title {
+        text-align: center;
         font-size: 1.1rem;
+        color: #d8b4f8;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
       }
 
-      /* Grid de medidores */
-      .voltage-grid {
+      .steps-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-bottom: 3rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
       }
 
-      /* Cada medidor de voltagem */
-      .voltage-meter {
+      .step-card {
         background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
         border: 2px solid #555;
-        border-radius: 20px;
-        padding: 2rem;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        cursor: grab;
+        transition: all 0.3s ease;
         text-align: center;
-        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        color: #e0e0e0;
         position: relative;
-        overflow: hidden;
-      }
-
-      .voltage-meter.bit-0 {
-        border-color: #f44336;
-        background: linear-gradient(145deg, #2a1a1a, #3a2a2a);
-      }
-
-      .voltage-meter.bit-1 {
-        border-color: #4caf50;
-        background: linear-gradient(145deg, #1a2a1a, #2a3a2a);
-      }
-
-      .voltage-display {
-        font-size: 2.5rem;
-        font-weight: 900;
-        font-family: "Orbitron", monospace;
-        color: #00cccc;
-        margin-bottom: 1rem;
-        text-shadow: 0 0 10px rgba(0, 204, 204, 0.5);
-      }
-
-      .voltage-bar {
-        width: 100%;
-        height: 20px;
-        background: #333;
-        border-radius: 10px;
-        margin: 1rem 0;
-        position: relative;
-        overflow: hidden;
-        border: 2px solid #555;
-      }
-
-      .voltage-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #f44336, #ff9800, #4caf50);
-        border-radius: 8px;
-        transition: width 0.3s ease;
-        position: relative;
-      }
-
-      .voltage-fill::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.3),
-          transparent
-        );
-        animation: voltage-flow 2s ease-in-out infinite;
-      }
-
-      @keyframes voltage-flow {
-        0% {
-          transform: translateX(-100%);
-        }
-        100% {
-          transform: translateX(100%);
-        }
-      }
-
-      .threshold-line {
-        position: absolute;
-        top: 0;
-        left: 60%; /* 3V de 5V = 60% */
-        width: 2px;
-        height: 100%;
-        background: #ffc107;
-        box-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
-      }
-
-      .threshold-line::before {
-        content: "3V";
-        position: absolute;
-        top: -25px;
-        left: -10px;
-        font-size: 0.8rem;
-        color: #ffc107;
-        font-weight: 700;
-      }
-
-      .bit-display {
-        font-size: 3rem;
-        font-weight: 900;
-        font-family: "Orbitron", monospace;
-        margin: 1rem 0;
-        padding: 1rem;
-        border-radius: 15px;
-        border: 3px solid;
-        transition: all 0.3s ease;
-      }
-
-      .bit-display.bit-0 {
-        color: #f44336;
-        border-color: #f44336;
-        background: rgba(244, 67, 54, 0.1);
-        box-shadow: 0 0 20px rgba(244, 67, 54, 0.3);
-      }
-
-      .bit-display.bit-1 {
-        color: #4caf50;
-        border-color: #4caf50;
-        background: rgba(76, 175, 80, 0.1);
-        box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
-      }
-
-      .bit-buttons {
+        user-select: none;
         display: flex;
+        align-items: center;
         gap: 1rem;
+      }
+
+      .step-card:hover {
+        border-color: #ff0077;
+        background: linear-gradient(145deg, #2a1a2a, #3a2a3a);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 0, 119, 0.2);
+      }
+
+      .step-card:active {
+        cursor: grabbing;
+        transform: scale(1.02);
+      }
+
+      .step-card.used {
+        opacity: 0.3;
+        cursor: not-allowed;
+        transform: scale(0.95);
+      }
+
+      .step-card.used:hover {
+        border-color: #555;
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        transform: scale(0.95);
+        box-shadow: none;
+      }
+
+      .step-number {
+        width: 40px;
+        height: 40px;
+        background: #ff0077;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
         justify-content: center;
-        margin-top: 1rem;
-      }
-
-      .bit-btn {
-        padding: 0.8rem 1.5rem;
-        border: 2px solid;
-        border-radius: 10px;
-        font-size: 1.2rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        font-weight: 900;
         font-family: "Orbitron", monospace;
-        background: transparent;
+        flex-shrink: 0;
       }
 
-      .bit-btn.btn-0 {
-        color: #f44336;
-        border-color: #f44336;
+      .step-text {
+        flex: 1;
+        text-align: left;
       }
 
-      .bit-btn.btn-0:hover {
-        background: rgba(244, 67, 54, 0.1);
-        transform: translateY(-2px);
-      }
-
-      .bit-btn.btn-0.selected {
-        background: linear-gradient(145deg, #f44336, #d32f2f);
+      /* Etapas colocadas */
+      .placed-step {
+        background: linear-gradient(145deg, #ff0077, #cc0066);
+        border: 2px solid #ff0088;
+        border-radius: 10px;
+        padding: 1rem;
         color: white;
-        box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
       }
 
-      .bit-btn.btn-1 {
-        color: #4caf50;
-        border-color: #4caf50;
+      .placed-step:hover {
+        background: linear-gradient(145deg, #ff0088, #dd0077);
+        transform: scale(1.02);
       }
 
-      .bit-btn.btn-1:hover {
-        background: rgba(76, 175, 80, 0.1);
-        transform: translateY(-2px);
-      }
-
-      .bit-btn.btn-1.selected {
-        background: linear-gradient(145deg, #4caf50, #388e3c);
+      .placed-step::after {
+        content: "×";
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #ff4444;
         color: white;
-        box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        opacity: 0;
+        transition: opacity 0.2s ease;
       }
 
-      /* Botões de ação */
+      .placed-step:hover::after {
+        opacity: 1;
+      }
+
+      .placed-step .step-number {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      /* Botões */
       .game-actions {
         display: flex;
         justify-content: center;
@@ -436,34 +468,12 @@
         color: #f44336;
       }
 
-      .feedback.info {
-        background: rgba(33, 150, 243, 0.1);
-        border: 2px solid #2196f3;
-        color: #2196f3;
-      }
-
-      /* Resultados finais */
-      .final-results {
-        text-align: center;
-        padding: 2rem;
-        background: rgba(255, 0, 119, 0.1);
-        border: 2px solid #ff0077;
-        border-radius: 20px;
-        margin-top: 2rem;
-        display: none;
-      }
-
-      .final-score {
-        font-size: 2rem;
-        font-weight: 900;
-        color: #ff0077;
-        margin-bottom: 1rem;
-      }
-
-      .final-message {
-        font-size: 1.1rem;
-        color: #e0e0e0;
+      .final-algorithm {
+        font-style: italic;
+        margin-top: 1rem;
+        font-size: 1rem;
         line-height: 1.6;
+        text-align: left;
       }
 
       /* Navegação */
@@ -488,6 +498,19 @@
       .nav-btn:hover {
         background: rgba(255, 0, 119, 0.2);
         transform: translateY(-2px);
+      }
+
+      .completion-badge {
+        background: linear-gradient(45deg, #4caf50, #388e3c);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 2rem;
+        box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
+        display: none;
       }
 
       /* Animações */
@@ -523,6 +546,17 @@
       }
 
       /* Responsive */
+      @media (max-width: 1024px) {
+        .game-card {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .image-section {
+          order: -1;
+        }
+      }
+
       @media (max-width: 768px) {
         .container {
           padding: 1rem;
@@ -532,13 +566,8 @@
           padding: 2rem;
         }
 
-        .voltage-grid {
+        .steps-grid {
           grid-template-columns: 1fr;
-          gap: 1.5rem;
-        }
-
-        .bit-buttons {
-          flex-direction: column;
         }
 
         .navigation {
@@ -555,56 +584,118 @@
     <div class="container">
       <header class="phase-header">
         <h1 class="logo">🕹️ RETRO RAIDERS</h1>
-        <h2 class="phase-title">FASE 6 – Voltagens e Bits</h2>
+        <h2 class="phase-title">FASE 6 – Algoritmos: Sequência Lógica</h2>
         <p class="phase-description">
-          Aprenda como computadores convertem voltagens elétricas em informação
-          digital. Para cada voltagem, escolha se representa um bit 0 ou 1!
+          Organize as etapas do algoritmo na ordem correta! Aprenda como
+          sequenciar instruções para resolver problemas de forma sistemática.
         </p>
       </header>
 
       <div class="game-card">
-        <div class="progress-status">
-          <div class="progress-info">
-            Respostas: <span id="answeredCount">0</span> de 6
-          </div>
-          <div class="score-info">
-            Acertos: <span id="correctCount">0</span>
-          </div>
-        </div>
-
-        <div class="explanation-area">
-          <div class="explanation-title">
-            🔌 Como Funciona a Conversão Digital
-          </div>
-          <div class="explanation-text">
-            Em circuitos digitais, diferentes voltagens representam informação
-            binária. Existe um <strong>limiar (threshold)</strong> que determina
-            se um sinal elétrico representa 0 ou 1.
-          </div>
-          <div class="threshold-info">
-            <div class="threshold-text">
-              ⚡ Limiar: 3V | Abaixo de 3V = Bit 0 | Acima de 3V = Bit 1
+        <div class="game-content">
+          <div class="algorithm-section">
+            <div class="algorithm-title">☕ Algoritmo: Como Fazer Café</div>
+            <div class="algorithm-description">
+              Arraste as etapas abaixo para a área de construção na ordem
+              correta. Um algoritmo é uma sequência lógica de passos para
+              resolver um problema!
             </div>
           </div>
+
+          <div class="algorithm-builder" id="algorithmBuilder">
+            <div class="builder-header">
+              <div class="builder-title">
+                🔧 Área de Construção do Algoritmo
+              </div>
+              <div class="builder-subtitle">
+                Arraste as etapas aqui na ordem correta
+              </div>
+            </div>
+            <div class="algorithm-steps" id="algorithmSteps">
+              <div class="step-placeholder">
+                Etapa 1: Arraste a primeira etapa aqui
+              </div>
+              <div class="step-placeholder">
+                Etapa 2: Arraste a segunda etapa aqui
+              </div>
+              <div class="step-placeholder">
+                Etapa 3: Arraste a terceira etapa aqui
+              </div>
+              <div class="step-placeholder">
+                Etapa 4: Arraste a quarta etapa aqui
+              </div>
+              <div class="step-placeholder">
+                Etapa 5: Arraste a quinta etapa aqui
+              </div>
+              <div class="step-placeholder">
+                Etapa 6: Arraste a sexta etapa aqui
+              </div>
+            </div>
+          </div>
+
+          <div class="available-steps">
+            <div class="steps-title">
+              📋 Etapas Disponíveis (arraste para organizar)
+            </div>
+            <div class="steps-grid" id="stepsGrid">
+              <div class="step-card" data-order="3" draggable="true">
+                <div class="step-number">?</div>
+                <div class="step-text">Adicionar café em pó</div>
+              </div>
+              <div class="step-card" data-order="1" draggable="true">
+                <div class="step-number">?</div>
+                <div class="step-text">Colocar filtro na cafeteira</div>
+              </div>
+              <div class="step-card" data-order="5" draggable="true">
+                <div class="step-number">?</div>
+                <div class="step-text">Aguardar o café ficar pronto</div>
+              </div>
+              <div class="step-card" data-order="2" draggable="true">
+                <div class="step-number">?</div>
+                <div class="step-text">Adicionar água na cafeteira</div>
+              </div>
+              <div class="step-card" data-order="6" draggable="true">
+                <div class="step-number">?</div>
+                <div class="step-text">Servir o café na xícara</div>
+              </div>
+              <div class="step-card" data-order="4" draggable="true">
+                <div class="step-number">?</div>
+                <div class="step-text">Ligar a cafeteira</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-actions">
+            <button class="btn btn-secondary" onclick="clearAlgorithm()">
+              🔄 Limpar
+            </button>
+            <button
+              class="btn btn-primary"
+              id="verifyBtn"
+              onclick="verifyAlgorithm()"
+              disabled
+            >
+              ✓ Verificar Sequência
+            </button>
+          </div>
+
+          <div class="feedback" id="feedback"></div>
+          <div class="completion-badge" id="completionBadge">
+            🎉 PARABÉNS! Você completou todas as fases do Retro Raiders!
+          </div>
         </div>
 
-        <div class="voltage-grid" id="voltageGrid">
-          <!-- Medidores serão inseridos aqui -->
-        </div>
-
-        <div class="game-actions">
-          <button class="btn btn-secondary" id="resetBtn">🔄 Reiniciar</button>
-          <button class="btn btn-primary" id="checkBtn">
-            ✓ Verificar Respostas
-          </button>
-        </div>
-
-        <div class="feedback" id="feedback"></div>
-
-        <div class="final-results" id="finalResults">
-          <div class="final-score" id="finalScore">6/6</div>
-          <div class="final-message" id="finalMessage">
-            <!-- Mensagem final -->
+        <div class="image-section">
+          <img
+            src="../assets/images/fase7.png"
+            alt="Fluxograma de algoritmo"
+            class="algorithm-diagram"
+            onerror="this.style.display='none'; document.querySelector('.image-caption').innerHTML='<strong>🔄 Fluxograma</strong><br>Representação visual de um algoritmo - exatamente como você está aprendendo a organizar etapas sequenciais!'"
+          />
+          <div class="image-caption">
+            <strong>Fluxograma de Algoritmo</strong><br />
+            Representação visual mostrando como um algoritmo organiza etapas em
+            sequência lógica - igual ao que você está fazendo!
           </div>
         </div>
       </div>
@@ -612,244 +703,182 @@
       <nav class="navigation">
         <a href="./fase5.html" class="nav-btn">← Fase Anterior</a>
         <a
-          href="./fase7.html"
+          href="./end-game.html"
           class="nav-btn"
-          id="nextBtn"
+          id="finishBtn"
           style="display: none"
-          >Próxima Fase →</a
+          >🏆 Finalizar Jogo</a
         >
       </nav>
     </div>
 
     <script>
-      // Dados das voltagens
-      const voltageData = [
-        { voltage: 0, expected: 0 },
-        { voltage: 1.5, expected: 0 },
-        { voltage: 2.8, expected: 0 },
-        { voltage: 3.3, expected: 1 },
-        { voltage: 4.7, expected: 1 },
-        { voltage: 5, expected: 1 },
-      ];
+      let draggedElement = null;
+      let placedSteps = [];
+      const correctOrder = [1, 2, 3, 4, 5, 6];
 
-      let userAnswers = {};
-      let gameCompleted = false;
-
-      // Inicializar jogo
-      document.addEventListener("DOMContentLoaded", function () {
-        createVoltageMeters();
-        setupEventListeners();
-        updateProgress();
+      // Configurar drag and drop
+      document.querySelectorAll(".step-card").forEach((step) => {
+        step.addEventListener("dragstart", handleDragStart);
+        step.addEventListener("dragend", handleDragEnd);
       });
 
-      function createVoltageMeters() {
-        const container = document.getElementById("voltageGrid");
+      const algorithmBuilder = document.getElementById("algorithmBuilder");
+      algorithmBuilder.addEventListener("dragover", handleDragOver);
+      algorithmBuilder.addEventListener("drop", handleDrop);
+      algorithmBuilder.addEventListener("dragenter", handleDragEnter);
+      algorithmBuilder.addEventListener("dragleave", handleDragLeave);
 
-        voltageData.forEach((data, index) => {
-          const meter = document.createElement("div");
-          meter.className = "voltage-meter";
-          meter.dataset.index = index;
-
-          meter.innerHTML = `
-                    <div class="voltage-display">${data.voltage}V</div>
-                    <div class="voltage-bar">
-                        <div class="voltage-fill" style="width: ${
-                          (data.voltage / 5) * 100
-                        }%"></div>
-                        <div class="threshold-line"></div>
-                    </div>
-                    <div class="bit-display" id="bitDisplay${index}">?</div>
-                    <div class="bit-buttons">
-                        <button class="bit-btn btn-0" onclick="selectBit(${index}, 0)">0</button>
-                        <button class="bit-btn btn-1" onclick="selectBit(${index}, 1)">1</button>
-                    </div>
-                `;
-
-          container.appendChild(meter);
-        });
+      function handleDragStart(e) {
+        if (this.classList.contains("used")) {
+          e.preventDefault();
+          return;
+        }
+        draggedElement = this;
+        this.style.opacity = "0.5";
       }
 
-      function setupEventListeners() {
-        document
-          .getElementById("resetBtn")
-          .addEventListener("click", resetGame);
-        document
-          .getElementById("checkBtn")
-          .addEventListener("click", checkAnswers);
+      function handleDragEnd(e) {
+        this.style.opacity = "1";
+        draggedElement = null;
       }
 
-      function selectBit(index, bit) {
-        if (gameCompleted) return;
-
-        userAnswers[index] = bit;
-
-        // Atualizar display do bit
-        const bitDisplay = document.getElementById(`bitDisplay${index}`);
-        bitDisplay.textContent = bit;
-        bitDisplay.className = `bit-display bit-${bit}`;
-
-        // Atualizar botões
-        const meter = document.querySelector(`[data-index="${index}"]`);
-        const buttons = meter.querySelectorAll(".bit-btn");
-        buttons.forEach((btn) => btn.classList.remove("selected"));
-
-        const selectedBtn = meter.querySelector(`.btn-${bit}`);
-        selectedBtn.classList.add("selected");
-
-        // Atualizar estilo do medidor
-        meter.className = `voltage-meter bit-${bit}`;
-
-        updateProgress();
+      function handleDragOver(e) {
+        e.preventDefault();
       }
 
-      function updateProgress() {
-        const answeredCount = Object.keys(userAnswers).length;
-        document.getElementById("answeredCount").textContent = answeredCount;
+      function handleDragEnter(e) {
+        e.preventDefault();
+        algorithmBuilder.classList.add("drag-over");
       }
 
-      function checkAnswers() {
-        let correctCount = 0;
-        const totalQuestions = voltageData.length;
-
-        voltageData.forEach((data, index) => {
-          const userAnswer = userAnswers[index];
-          const meter = document.querySelector(`[data-index="${index}"]`);
-
-          if (userAnswer !== undefined) {
-            if (userAnswer === data.expected) {
-              correctCount++;
-              // Visual de correto já está aplicado
-            } else {
-              // Adicionar visual de incorreto
-              meter.style.animation = "shake 0.5s ease-in-out";
-              setTimeout(() => {
-                meter.style.animation = "";
-              }, 500);
-            }
-          }
-        });
-
-        // Atualizar contador
-        document.getElementById("correctCount").textContent = correctCount;
-
-        // Mostrar feedback
-        if (Object.keys(userAnswers).length === 0) {
-          showFeedback(
-            "info",
-            "💡 Clique nos botões 0 ou 1 para escolher o bit correspondente a cada voltagem!"
-          );
-        } else if (
-          correctCount === totalQuestions &&
-          Object.keys(userAnswers).length === totalQuestions
-        ) {
-          gameCompleted = true;
-          showFeedback(
-            "success",
-            `🎉 Perfeito! Você entendeu como voltagens são convertidas em bits digitais!`
-          );
-          endGame();
-        } else {
-          const answeredCount = Object.keys(userAnswers).length;
-          if (answeredCount < totalQuestions) {
-            showFeedback(
-              "info",
-              `📝 ${correctCount} de ${answeredCount} respostas estão corretas. Continue!`
-            );
-          } else {
-            showFeedback(
-              "error",
-              `❌ ${correctCount} de ${totalQuestions} respostas estão corretas. Lembre-se: abaixo de 3V = 0, acima de 3V = 1`
-            );
-          }
+      function handleDragLeave(e) {
+        if (!algorithmBuilder.contains(e.relatedTarget)) {
+          algorithmBuilder.classList.remove("drag-over");
         }
       }
 
-      function showFeedback(type, message) {
-        const feedback = document.getElementById("feedback");
-        feedback.className = `feedback ${type}`;
-        feedback.textContent = message;
-        feedback.style.display = "block";
+      function handleDrop(e) {
+        e.preventDefault();
+        algorithmBuilder.classList.remove("drag-over");
 
-        setTimeout(() => {
-          if (type !== "success") {
-            feedback.style.display = "none";
-          }
-        }, 4000);
+        if (draggedElement && !draggedElement.classList.contains("used")) {
+          addStepToAlgorithm(draggedElement);
+        }
       }
 
-      function resetGame() {
-        userAnswers = {};
-        gameCompleted = false;
+      function addStepToAlgorithm(stepCard) {
+        const order = parseInt(stepCard.dataset.order);
+        const stepText = stepCard.querySelector(".step-text").textContent;
 
-        // Reset todos os medidores
-        document.querySelectorAll(".voltage-meter").forEach((meter) => {
-          meter.className = "voltage-meter";
+        // Encontrar próximo slot disponível
+        const algorithmSteps = document.getElementById("algorithmSteps");
+        const placeholders =
+          algorithmSteps.querySelectorAll(".step-placeholder");
 
-          const buttons = meter.querySelectorAll(".bit-btn");
-          buttons.forEach((btn) => btn.classList.remove("selected"));
+        if (placedSteps.length >= placeholders.length) return;
 
-          const index = meter.dataset.index;
-          const bitDisplay = document.getElementById(`bitDisplay${index}`);
-          bitDisplay.textContent = "?";
-          bitDisplay.className = "bit-display";
+        // Criar elemento colocado
+        const placedStep = document.createElement("div");
+        placedStep.className = "placed-step";
+        placedStep.innerHTML = `
+                <div class="step-number">${placedSteps.length + 1}</div>
+                <div class="step-text">${stepText}</div>
+            `;
+        placedStep.addEventListener("click", () =>
+          removeStepFromAlgorithm(placedStep, stepCard, order)
+        );
+
+        // Substituir placeholder
+        const targetPlaceholder = placeholders[placedSteps.length];
+        targetPlaceholder.style.display = "none";
+        algorithmSteps.insertBefore(placedStep, targetPlaceholder.nextSibling);
+
+        // Marcar como usado
+        stepCard.classList.add("used");
+
+        // Adicionar à lista de passos colocados
+        placedSteps.push({
+          order,
+          element: placedStep,
+          originalCard: stepCard,
         });
 
-        // Reset contadores
-        document.getElementById("answeredCount").textContent = "0";
-        document.getElementById("correctCount").textContent = "0";
+        updateVerifyButton();
+      }
 
-        // Esconder feedback e resultados
+      function removeStepFromAlgorithm(placedStep, stepCard, order) {
+        const algorithmSteps = document.getElementById("algorithmSteps");
+        algorithmSteps.removeChild(placedStep);
+
+        // Mostrar o placeholder correspondente novamente
+        const placeholders =
+          algorithmSteps.querySelectorAll(".step-placeholder");
+        if (placeholders[placedSteps.length]) {
+          placeholders[placedSteps.length].style.display = "block";
+        }
+
+        // Marcar o card original como disponível
+        stepCard.classList.remove("used");
+
+        // Remover da lista
+        placedSteps = placedSteps.filter((item) => item.element !== placedStep);
+
+        updateVerifyButton();
+      }
+
+      function clearAlgorithm() {
+        const algorithmSteps = document.getElementById("algorithmSteps");
+
+        placedSteps.forEach((item) => {
+          item.originalCard.classList.remove("used");
+          algorithmSteps.removeChild(item.element);
+        });
+
+        const placeholders =
+          algorithmSteps.querySelectorAll(".step-placeholder");
+        placeholders.forEach((ph) => {
+          ph.style.display = "block";
+        });
+
+        placedSteps = [];
+
+        updateVerifyButton();
         document.getElementById("feedback").style.display = "none";
-        document.getElementById("finalResults").style.display = "none";
-        document.getElementById("nextBtn").style.display = "none";
+        document.getElementById("completionBadge").style.display = "none";
       }
 
-      function endGame() {
-        setTimeout(() => {
-          const finalResults = document.getElementById("finalResults");
-          const finalScore = document.getElementById("finalScore");
-          const finalMessage = document.getElementById("finalMessage");
-
-          finalScore.textContent = `6/6 (100%)`;
-          finalMessage.innerHTML = `
-                    🎉 <strong>Excelente!</strong> Você dominou a conversão de voltagens para bits!<br><br>
-                    <em>Agora você entende como computadores interpretam sinais elétricos:</em><br>
-                    • <strong>0V - 2.8V</strong> → Bit 0 (BAIXO/LOW)<br>
-                    • <strong>3.3V - 5V</strong> → Bit 1 (ALTO/HIGH)<br>
-                    • <strong>Limiar: 3V</strong> → Ponto de separação digital<br><br>
-                    <strong>Este é o fundamento de toda computação digital!</strong>
-                `;
-
-          finalResults.style.display = "block";
-          document.getElementById("nextBtn").style.display = "inline-block";
-        }, 1500);
+      function updateVerifyButton() {
+        const verifyBtn = document.getElementById("verifyBtn");
+        verifyBtn.disabled = placedSteps.length !== 6;
       }
 
-      // Função global para os botões (necessária para onclick inline)
-      window.selectBit = selectBit;
+      function verifyAlgorithm() {
+        const feedback = document.getElementById("feedback");
+        const currentOrder = placedSteps.map((item) => item.order);
+        const isCorrect =
+          JSON.stringify(currentOrder) === JSON.stringify(correctOrder);
 
-      // Adicionar dica inicial
-      document.addEventListener("DOMContentLoaded", function () {
-        setTimeout(() => {
-          if (Object.keys(userAnswers).length === 0) {
-            showFeedback(
-              "info",
-              "💡 Dica: Observe a linha amarela nos medidores - ela marca o limiar de 3V. Abaixo = 0, Acima = 1!"
-            );
-          }
-        }, 3000);
-      });
+        if (isCorrect) {
+          feedback.className = "feedback success";
+          feedback.innerHTML = `
+        <div>🎯 <strong>Sequência Correta!</strong> Parabéns, você organizou o algoritmo corretamente.</div>
+        <div class="final-algorithm">
+            Etapas do algoritmo: Verificar café → Colocar filtro → Adicionar água → Ligar cafeteira → Aguardar → Servir
+        </div>
+    `;
+          document.getElementById("completionBadge").style.display = "block";
+          document.getElementById("finishBtn").style.display = "inline-block";
+        } else {
+          feedback.className = "feedback error";
+          feedback.innerHTML = `
+        <div>❌ <strong>Sequência Incorreta!</strong> Algo está fora de ordem.</div>
+        <div>Tente revisar a lógica da sequência para fazer um café perfeito!</div>
+    `;
+        }
 
-      // Adicionar efeito de shake para respostas incorretas
-      const shakeStyle = document.createElement("style");
-      shakeStyle.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-10px); }
-                75% { transform: translateX(10px); }
-            }
-        `;
-      document.head.appendChild(shakeStyle);
+        feedback.style.display = "block";
+      }
     </script>
   </body>
 </html>

@@ -71,7 +71,7 @@
 
       /* Container principal */
       .container {
-        max-width: 1400px;
+        max-width: 1200px;
         margin: 0 auto;
         padding: 2rem;
         min-height: 100vh;
@@ -149,226 +149,253 @@
 
       /* Área de explicação */
       .explanation-area {
-        background: rgba(33, 150, 243, 0.1);
-        border: 2px solid #2196f3;
+        background: rgba(0, 204, 204, 0.1);
+        border: 2px solid #00cccc;
         border-radius: 20px;
         padding: 2rem;
         margin-bottom: 3rem;
+        text-align: center;
       }
 
       .explanation-title {
         font-size: 1.4rem;
         font-weight: 700;
-        color: #2196f3;
+        color: #00cccc;
         margin-bottom: 1rem;
         font-family: "Orbitron", monospace;
-        text-align: center;
       }
 
-      .binary-example {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
+      .explanation-text {
+        font-size: 1rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .explanation-text-cit {
+        font-size: 0.8rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+        margin: 0.5rem;
+      }
+
+      .threshold-info {
+        background: rgba(255, 193, 7, 0.1);
+        border: 2px solid #ffc107;
+        border-radius: 10px;
+        padding: 1rem;
         margin-top: 1rem;
       }
 
-      .example-card {
-        background: rgba(33, 150, 243, 0.1);
-        border: 1px solid rgba(33, 150, 243, 0.3);
-        border-radius: 10px;
-        padding: 1rem;
-        text-align: center;
+      .threshold-text {
+        color: #ffc107;
+        font-weight: 600;
+        font-size: 1.1rem;
       }
 
-      .example-decimal {
-        font-size: 1.5rem;
-        color: #2196f3;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-      }
-
-      .example-binary {
-        font-size: 1.2rem;
-        color: #e0e0e0;
-        font-family: "Orbitron", monospace;
-      }
-
-      /* Grid de conversores */
-      .conversion-grid {
+      /* Grid de medidores */
+      .voltage-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 2rem;
         margin-bottom: 3rem;
       }
 
-      /* Cada conversor */
-      .binary-converter {
+      /* Cada medidor de voltagem */
+      .voltage-meter {
         background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
-        border: 2px solid #ff0077;
+        border: 2px solid #555;
         border-radius: 20px;
         padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
-        transition: all 0.3s ease;
+      }
+      .voltage-meter.bit-x {
+        border-color: #ffc107;
+        background: linear-gradient(145deg, #3a2e1a, #4a3a1a);
       }
 
-      .binary-converter.completed {
+      .bit-display.bit-x {
+        color: #ffc107;
+        border-color: #ffc107;
+        background: rgba(255, 193, 7, 0.1);
+        box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+      }
+
+      .bit-btn.btn-x {
+        color: #ffc107;
+        border-color: #ffc107;
+      }
+
+      .bit-btn.btn-x:hover {
+        background: rgba(255, 193, 7, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .bit-btn.btn-x.selected {
+        background: linear-gradient(145deg, #ffc107, #d9a800);
+        color: black;
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+      }
+      .voltage-meter.bit-0 {
+        border-color: #3698f4;
+        background: linear-gradient(145deg, #1a2a3a, #203850);
+      }
+
+      .voltage-meter.bit-1 {
         border-color: #4caf50;
         background: linear-gradient(145deg, #1a2a1a, #2a3a2a);
       }
 
-      .binary-converter.incorrect {
-        border-color: #f44336;
-        background: linear-gradient(145deg, #2a1a1a, #3a2a2a);
-        animation: shake 0.5s ease-in-out;
+      .voltage-display {
+        font-size: 2.5rem;
+        font-weight: 900;
+        font-family: "Orbitron", monospace;
+        color: #00cccc;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px rgba(0, 204, 204, 0.5);
       }
 
-      @keyframes shake {
-        0%,
+      .voltage-bar {
+        width: 100%;
+        height: 20px;
+        background: #333;
+        border-radius: 10px;
+        margin: 1rem 0;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid #555;
+      }
+
+      .voltage-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #f44336, #ff9800, #4caf50);
+        border-radius: 8px;
+        transition: width 0.3s ease;
+        position: relative;
+      }
+
+      .voltage-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: voltage-flow 2s ease-in-out infinite;
+      }
+
+      @keyframes voltage-flow {
+        0% {
+          transform: translateX(-100%);
+        }
         100% {
-          transform: translateX(0);
-        }
-        25% {
-          transform: translateX(-10px);
-        }
-        75% {
-          transform: translateX(10px);
+          transform: translateX(100%);
         }
       }
 
-      .decimal-display {
-        text-align: center;
-        margin-bottom: 2rem;
+      .threshold-line.low {
+        position: absolute;
+        top: 0;
+        left: 30%; /* 1.5V de 5V */
+        width: 2px;
+        height: 100%;
+        background: #ffc107;
+        box-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
       }
 
-      .decimal-number {
+      .threshold-line.high {
+        position: absolute;
+        top: 0;
+        left: 70%; /* 3.5V de 5V */
+        width: 2px;
+        height: 100%;
+        background: #ffc107;
+        box-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
+      }
+
+      .bit-display {
         font-size: 3rem;
         font-weight: 900;
-        color: #2196f3;
         font-family: "Orbitron", monospace;
-        text-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
-      }
-
-      .decimal-label {
-        font-size: 1rem;
-        color: #d8b4f8;
-        margin-top: 0.5rem;
-      }
-
-      /* Visualizador de potências de 2 */
-      .powers-visualizer {
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 15px;
+        margin: 1rem 0;
         padding: 1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .powers-title {
-        text-align: center;
-        font-size: 0.9rem;
-        color: #ffc107;
-        margin-bottom: 1rem;
-        font-weight: 600;
-      }
-
-      .powers-grid {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-      }
-
-      .power-bit {
-        background: #333;
-        border: 2px solid #555;
-        border-radius: 8px;
-        padding: 0.5rem;
-        text-align: center;
-        min-width: 50px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-      }
-
-      .power-bit.active {
-        background: linear-gradient(145deg, #ff0077, #cc0066);
-        border-color: #ff0088;
-        color: white;
-        box-shadow: 0 0 15px rgba(255, 0, 119, 0.5);
-      }
-
-      .power-value {
-        font-size: 0.8rem;
-        color: #ffc107;
-        font-weight: 700;
-      }
-
-      .bit-value {
-        font-size: 1.2rem;
-        font-family: "Orbitron", monospace;
-        font-weight: 900;
-        margin-top: 0.2rem;
-      }
-
-      /* Área de resposta */
-      .answer-area {
-        text-align: center;
-      }
-
-      .binary-input {
-        background: rgba(0, 0, 0, 0.5);
-        border: 3px solid #555;
         border-radius: 15px;
-        padding: 1rem 1.5rem;
-        font-size: 1.8rem;
-        font-family: "Orbitron", monospace;
-        color: #e0e0e0;
-        text-align: center;
-        width: 100%;
-        max-width: 200px;
+        border: 3px solid;
         transition: all 0.3s ease;
       }
 
-      .binary-input:focus {
-        outline: none;
-        border-color: #ff0077;
-        box-shadow: 0 0 20px rgba(255, 0, 119, 0.3);
-        color: #fff;
+      .bit-display.bit-0 {
+        color: #3698f4;
+        border-color: #3698f4;
+        background: rgba(69, 160, 234, 0.1);
+        box-shadow: 0 0 20px rgba(76, 54, 244, 0.3);
       }
 
-      .binary-input.correct {
+      .bit-display.bit-1 {
+        color: #4caf50;
         border-color: #4caf50;
         background: rgba(76, 175, 80, 0.1);
-        color: #4caf50;
+        box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
       }
 
-      .binary-input.incorrect {
-        border-color: #f44336;
-        background: rgba(244, 67, 54, 0.1);
-        color: #f44336;
-      }
-
-      .input-label {
-        font-size: 1rem;
-        color: #d8b4f8;
+      .bit-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
         margin-top: 1rem;
       }
 
-      /* Botão de dica */
-      .hint-btn {
-        background: transparent;
-        border: 2px solid #ffc107;
-        color: #ffc107;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
+      .bit-btn {
+        padding: 0.8rem 1.5rem;
+        border: 2px solid;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: 700;
         cursor: pointer;
-        margin-top: 1rem;
         transition: all 0.3s ease;
+        font-family: "Orbitron", monospace;
+        background: transparent;
       }
 
-      .hint-btn:hover {
-        background: rgba(255, 193, 7, 0.1);
+      .bit-btn.btn-0 {
+        color: #3698f4;
+        border-color: #3698f4;
+      }
+
+      .bit-btn.btn-0:hover {
+        background: rgba(119, 123, 212, 0.1);
         transform: translateY(-2px);
+      }
+
+      .bit-btn.btn-0.selected {
+        background: linear-gradient(145deg, #3698f4, #044a68);
+        color: white;
+        box-shadow: 0 0 15px rgba(153, 212, 230, 0.5);
+      }
+
+      .bit-btn.btn-1 {
+        color: #4caf50;
+        border-color: #4caf50;
+      }
+
+      .bit-btn.btn-1:hover {
+        background: rgba(76, 175, 80, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .bit-btn.btn-1.selected {
+        background: linear-gradient(145deg, #4caf50, #388e3c);
+        color: white;
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
       }
 
       /* Botões de ação */
@@ -538,13 +565,13 @@
           padding: 2rem;
         }
 
-        .conversion-grid {
+        .voltage-grid {
           grid-template-columns: 1fr;
+          gap: 1.5rem;
         }
 
-        .powers-grid {
+        .bit-buttons {
           flex-direction: column;
-          align-items: center;
         }
 
         .navigation {
@@ -561,18 +588,17 @@
     <div class="container">
       <header class="phase-header">
         <h1 class="logo">🕹️ RETRO RAIDERS</h1>
-        <h2 class="phase-title">FASE 5 – Representação Binária</h2>
+        <h2 class="phase-title">FASE 5 – Voltagens e Bits</h2>
         <p class="phase-description">
-          Aprenda como números decimais são convertidos para binário - a
-          linguagem fundamental dos computadores! Use o visualizador de
-          potências de 2 para entender o processo.
+          Aprenda como computadores convertem voltagens elétricas em informação
+          digital. Para cada voltagem, escolha se representa um bit 0 ou 1!
         </p>
       </header>
 
       <div class="game-card">
         <div class="progress-status">
           <div class="progress-info">
-            Conversões: <span id="completedCount">0</span> de 5
+            Respostas: <span id="answeredCount">0</span> de 6
           </div>
           <div class="score-info">
             Acertos: <span id="correctCount">0</span>
@@ -581,47 +607,46 @@
 
         <div class="explanation-area">
           <div class="explanation-title">
-            💡 Como Funciona o Sistema Binário
+            🔌 Como Funciona a Conversão Digital
           </div>
-          <div style="text-align: center; color: #e0e0e0; margin-bottom: 1rem">
-            No sistema binário, cada posição representa uma potência de 2. Some
-            as potências onde há "1" para obter o valor decimal.
+          <div class="explanation-text">
+            Em circuitos digitais, diferentes faixas de voltagem representam
+            bits. Para garantir confiabilidade, os sistemas utilizam
+            <strong>zonas de segurança</strong>, que evitam erros causados por
+            ruídos. Voltagens fora dessas zonas podem causar interpretações
+            incorretas.
           </div>
-          <div class="binary-example">
-            <div class="example-card">
-              <div class="example-decimal">1 = 2⁰</div>
-              <div class="example-binary">1</div>
+          <div class="threshold-info">
+            <div class="threshold-text">
+              ✅ Zona de Segurança (Bit 0): 0 V a 1,5 V <br />
+              ✅ Zona de Segurança (Bit 1): 3,5 V a 5 V <br />
+              ⚠️ Zona Indefinida (evitar): 1,5 V a 3,5 V
             </div>
-            <div class="example-card">
-              <div class="example-decimal">4 = 2²</div>
-              <div class="example-binary">100</div>
-            </div>
-            <div class="example-card">
-              <div class="example-decimal">6 = 4+2</div>
-              <div class="example-binary">110</div>
-            </div>
-            <div class="example-card">
-              <div class="example-decimal">9 = 8+1</div>
-              <div class="example-binary">1001</div>
-            </div>
+          </div>
+          <div class="explanation-text-cit">
+            ** A <strong>zona de segurança</strong> garante que, mesmo com
+            ruídos ou pequenas variações na tensão, o circuito ainda interprete
+            corretamente o bit.<br />
+            Já a <strong>zona indefinida</strong> é uma área de risco: o
+            circuito pode não saber se o sinal representa 0 ou 1.
           </div>
         </div>
 
-        <div class="conversion-grid" id="conversionGrid">
-          <!-- Conversores serão inseridos aqui -->
+        <div class="voltage-grid" id="voltageGrid">
+          <!-- Medidores serão inseridos aqui -->
         </div>
 
         <div class="game-actions">
           <button class="btn btn-secondary" id="resetBtn">🔄 Reiniciar</button>
           <button class="btn btn-primary" id="checkBtn">
-            ✓ Verificar Todas
+            ✓ Verificar Respostas
           </button>
         </div>
 
         <div class="feedback" id="feedback"></div>
 
         <div class="final-results" id="finalResults">
-          <div class="final-score" id="finalScore">5/5</div>
+          <div class="final-score" id="finalScore">6/6</div>
           <div class="final-message" id="finalMessage">
             <!-- Mensagem final -->
           </div>
@@ -641,201 +666,111 @@
     </div>
 
     <script>
-      // Dados dos números para conversão
-      const numbers = [2, 5, 7, 10, 15];
-      const correctAnswers = ["10", "101", "111", "1010", "1111"];
+      // Dados das voltagens
+      const voltageData = [
+        { voltage: 0.8, expected: 0 },
+        { voltage: 1.5, expected: 0 },
+        { voltage: 2.8, expected: "x" },
+        { voltage: 3.3, expected: "x" },
+        { voltage: 4.7, expected: 1 },
+        { voltage: 5, expected: 1 },
+      ];
 
       let userAnswers = {};
       let gameCompleted = false;
 
       // Inicializar jogo
       document.addEventListener("DOMContentLoaded", function () {
-        createConverters();
+        createVoltageMeters();
         setupEventListeners();
         updateProgress();
       });
 
-      function createConverters() {
-        const container = document.getElementById("conversionGrid");
+      function createVoltageMeters() {
+        const container = document.getElementById("voltageGrid");
 
-        numbers.forEach((number, index) => {
-          const converter = document.createElement("div");
-          converter.className = "binary-converter";
-          converter.dataset.index = index;
+        voltageData.forEach((data, index) => {
+          const meter = document.createElement("div");
+          meter.className = "voltage-meter";
+          meter.dataset.index = index;
 
-          // Calcular potências de 2 necessárias para este número
-          const powers = getPowersOfTwo(number);
-
-          converter.innerHTML = `
-                    <div class="decimal-display">
-                        <div class="decimal-number">${number}</div>
-                        <div class="decimal-label">Decimal</div>
+          meter.innerHTML = `
+                    <div class="voltage-display">${data.voltage}V</div>
+                    <div class="voltage-bar">
+                        <div class="voltage-fill" style="width: ${
+                          (data.voltage / 5) * 100
+                        }%"></div>
+                        <div class="threshold-line low"></div>
+<div class="threshold-line high"></div>
                     </div>
-                    
-                    <div class="powers-visualizer">
-                        <div class="powers-title">Potências de 2 (clique para ativar/desativar)</div>
-                        <div class="powers-grid" id="powersGrid${index}">
-                            ${generatePowersHTML(powers, number)}
-                        </div>
-                    </div>
-                    
-                    <div class="answer-area">
-                        <input type="text" class="binary-input" id="input${index}" 
-                               placeholder="?" maxlength="8" data-index="${index}">
-                        <div class="input-label">Binário</div>
-                        <button class="hint-btn" onclick="showHint(${index})">💡 Dica</button>
-                    </div>
+                    <div class="bit-display" id="bitDisplay${index}">?</div>
+                    <div class="bit-buttons">
+                  <button class="bit-btn btn-0" onclick="selectBit(${index}, 0)">0</button>
+                  <button class="bit-btn btn-1" onclick="selectBit(${index}, 1)">1</button>
+                  <button class="bit-btn btn-x" onclick="selectBit(${index}, 'x')">⚠ Zona Indef.</button>
+</div>
                 `;
 
-          container.appendChild(converter);
+          container.appendChild(meter);
         });
-      }
-
-      function getPowersOfTwo(number) {
-        // Determinar quantos bits precisamos (até a maior potência de 2 ≤ number)
-        let maxPower = 0;
-        while (Math.pow(2, maxPower + 1) <= number) {
-          maxPower++;
-        }
-
-        // Adicionar algumas potências extras para contexto
-        return Math.max(4, maxPower + 1);
-      }
-
-      function generatePowersHTML(maxPower, targetNumber) {
-        let html = "";
-        for (let i = maxPower; i >= 0; i--) {
-          const value = Math.pow(2, i);
-          const isActive = (targetNumber & value) !== 0; // Bit masking para verificar se está ativo
-          html += `
-                    <div class="power-bit ${isActive ? "active" : ""}" 
-                         data-power="${i}" data-value="${value}"
-                         onclick="togglePowerBit(this, ${Math.floor(
-                           targetNumber / numbers.length
-                         )})">
-                        <div class="power-value">2^${i}=${value}</div>
-                        <div class="bit-value">${isActive ? "1" : "0"}</div>
-                    </div>
-                `;
-        }
-        return html;
       }
 
       function setupEventListeners() {
-        // Event listeners para os inputs
-        document.querySelectorAll(".binary-input").forEach((input) => {
-          input.addEventListener("input", function () {
-            const index = parseInt(this.dataset.index);
-            const value = this.value.trim();
-
-            // Permitir apenas 0 e 1
-            this.value = value.replace(/[^01]/g, "");
-
-            if (this.value) {
-              userAnswers[index] = this.value;
-            } else {
-              delete userAnswers[index];
-            }
-
-            updateProgress();
-            validateInput(this, index);
-          });
-        });
-
-        // Botões
         document
           .getElementById("resetBtn")
           .addEventListener("click", resetGame);
         document
           .getElementById("checkBtn")
-          .addEventListener("click", checkAllAnswers);
+          .addEventListener("click", checkAnswers);
       }
 
-      function togglePowerBit(element, converterIndex) {
-        // Esta é uma visualização educativa - não afeta o jogo
-        element.classList.toggle("active");
-        const bitValue = element.querySelector(".bit-value");
-        bitValue.textContent = element.classList.contains("active") ? "1" : "0";
+      function selectBit(index, bit) {
+        if (gameCompleted) return;
 
-        // Calcular o valor resultante
-        const powersGrid = element.parentElement;
-        const activeBits = powersGrid.querySelectorAll(".power-bit.active");
-        let total = 0;
-        activeBits.forEach((bit) => {
-          total += parseInt(bit.dataset.value);
-        });
+        userAnswers[index] = bit;
 
-        // Mostrar dica visual
-        showFeedback("info", `💡 Soma das potências ativas: ${total}`, 2000);
-      }
+        // Atualizar display do bit
+        const bitDisplay = document.getElementById(`bitDisplay${index}`);
+        bitDisplay.textContent = bit;
+        bitDisplay.className = `bit-display bit-${bit}`;
 
-      function validateInput(input, index) {
-        const userAnswer = input.value;
-        const correctAnswer = correctAnswers[index];
+        // Atualizar botões
+        const meter = document.querySelector(`[data-index="${index}"]`);
+        const buttons = meter.querySelectorAll(".bit-btn");
+        buttons.forEach((btn) => btn.classList.remove("selected"));
 
-        // Reset classes
-        input.classList.remove("correct", "incorrect");
+        const selectedBtn = meter.querySelector(`.btn-${bit}`);
+        selectedBtn.classList.add("selected");
 
-        if (userAnswer && userAnswer === correctAnswer) {
-          input.classList.add("correct");
-          const converter = document.querySelector(`[data-index="${index}"]`);
-          converter.classList.add("completed");
-        } else if (userAnswer && userAnswer !== correctAnswer) {
-          input.classList.add("incorrect");
-        }
-      }
+        // Atualizar estilo do medidor
+        meter.className = `voltage-meter bit-${bit}`;
 
-      function showHint(index) {
-        const number = numbers[index];
-        const binary = correctAnswers[index];
-
-        // Mostrar processo de conversão
-        let process = `💡 Para converter ${number} para binário:\n`;
-        let remaining = number;
-        let powers = [];
-
-        // Encontrar as potências de 2
-        for (let i = 10; i >= 0; i--) {
-          const power = Math.pow(2, i);
-          if (remaining >= power) {
-            powers.push(`2^${i} = ${power}`);
-            remaining -= power;
-          }
-        }
-
-        process += `Decomposição: ${number} = ${powers.join(" + ")}\n`;
-        process += `Resposta: ${binary}`;
-
-        showFeedback("info", process, 4000);
+        updateProgress();
       }
 
       function updateProgress() {
-        const completedCount = Object.keys(userAnswers).length;
-        document.getElementById("completedCount").textContent = completedCount;
+        const answeredCount = Object.keys(userAnswers).length;
+        document.getElementById("answeredCount").textContent = answeredCount;
       }
 
-      function checkAllAnswers() {
+      function checkAnswers() {
         let correctCount = 0;
-        const totalQuestions = numbers.length;
+        const totalQuestions = voltageData.length;
 
-        numbers.forEach((number, index) => {
+        voltageData.forEach((data, index) => {
           const userAnswer = userAnswers[index];
-          const correctAnswer = correctAnswers[index];
-          const converter = document.querySelector(`[data-index="${index}"]`);
-          const input = document.getElementById(`input${index}`);
+          const meter = document.querySelector(`[data-index="${index}"]`);
 
           if (userAnswer !== undefined) {
-            if (userAnswer === correctAnswer) {
+            if (userAnswer === data.expected) {
               correctCount++;
-              converter.classList.remove("incorrect");
-              converter.classList.add("completed");
-              input.classList.remove("incorrect");
-              input.classList.add("correct");
+              // Visual de correto já está aplicado
             } else {
-              converter.classList.remove("completed");
-              converter.classList.add("incorrect");
-              input.classList.remove("correct");
-              input.classList.add("incorrect");
+              // Adicionar visual de incorreto
+              meter.style.animation = "shake 0.5s ease-in-out";
+              setTimeout(() => {
+                meter.style.animation = "";
+              }, 500);
             }
           }
         });
@@ -847,7 +782,7 @@
         if (Object.keys(userAnswers).length === 0) {
           showFeedback(
             "info",
-            "💡 Digite os valores binários nos campos de resposta!"
+            "💡 Clique nos botões 0 ou 1 para escolher o bit correspondente a cada voltagem!"
           );
         } else if (
           correctCount === totalQuestions &&
@@ -856,7 +791,7 @@
           gameCompleted = true;
           showFeedback(
             "success",
-            `🎉 Perfeito! Você dominou a conversão decimal-binário!`
+            `🎉 Perfeito! Você entendeu como voltagens são convertidas em bits digitais!`
           );
           endGame();
         } else {
@@ -864,18 +799,20 @@
           if (answeredCount < totalQuestions) {
             showFeedback(
               "info",
-              `📝 ${correctCount} de ${answeredCount} conversões estão corretas. Continue!`
+              `📝 ${correctCount} de ${answeredCount} respostas estão corretas. Continue!`
             );
           } else {
             showFeedback(
               "error",
-              `❌ ${correctCount} de ${totalQuestions} conversões estão corretas. Use as dicas para ajudar!`
+              `❌ ${correctCount} de ${totalQuestions} respostas estão corretas. Lembre-se: ✅ Zona de Segurança (Bit 0): 0 V a 1,5 V
+              ✅ Zona de Segurança (Bit 1): 3,5 V a 5 V
+              ⚠️ Zona Indefinida (evitar): 1,5 V a 3,5 V`
             );
           }
         }
       }
 
-      function showFeedback(type, message, duration = 4000) {
+      function showFeedback(type, message) {
         const feedback = document.getElementById("feedback");
         feedback.className = `feedback ${type}`;
         feedback.textContent = message;
@@ -885,25 +822,28 @@
           if (type !== "success") {
             feedback.style.display = "none";
           }
-        }, duration);
+        }, 4000);
       }
 
       function resetGame() {
         userAnswers = {};
         gameCompleted = false;
 
-        // Reset todos os inputs e conversores
-        document.querySelectorAll(".binary-input").forEach((input) => {
-          input.value = "";
-          input.classList.remove("correct", "incorrect");
-        });
+        // Reset todos os medidores
+        document.querySelectorAll(".voltage-meter").forEach((meter) => {
+          meter.className = "voltage-meter";
 
-        document.querySelectorAll(".binary-converter").forEach((converter) => {
-          converter.classList.remove("completed", "incorrect");
+          const buttons = meter.querySelectorAll(".bit-btn");
+          buttons.forEach((btn) => btn.classList.remove("selected"));
+
+          const index = meter.dataset.index;
+          const bitDisplay = document.getElementById(`bitDisplay${index}`);
+          bitDisplay.textContent = "?";
+          bitDisplay.className = "bit-display";
         });
 
         // Reset contadores
-        document.getElementById("completedCount").textContent = "0";
+        document.getElementById("answeredCount").textContent = "0";
         document.getElementById("correctCount").textContent = "0";
 
         // Esconder feedback e resultados
@@ -918,15 +858,14 @@
           const finalScore = document.getElementById("finalScore");
           const finalMessage = document.getElementById("finalMessage");
 
-          finalScore.textContent = `5/5 (100%)`;
+          finalScore.textContent = `6/6 (100%)`;
           finalMessage.innerHTML = `
-                    🎉 <strong>Excelente trabalho!</strong> Você dominou a representação binária!<br><br>
-                    <em>Agora você entende como computadores representam números:</em><br>
-                    • <strong>Sistema Binário</strong>: Base 2 (apenas 0 e 1)<br>
-                    • <strong>Potências de 2</strong>: Cada posição vale 2^n<br>
-                    • <strong>Conversão</strong>: Soma das potências ativas<br><br>
-                    <strong>Esta é a base de toda computação digital!</strong><br>
-                    Próximo: Código de Máquina - como instruções são codificadas!
+                    🎉 <strong>Excelente!</strong> Você dominou a conversão de voltagens para bits!<br><br>
+                    <em>Agora você entende como computadores interpretam sinais elétricos:</em><br>
+                    • <strong>0V - 2.8V</strong> → Bit 0 (BAIXO/LOW)<br>
+                    • <strong>3.3V - 5V</strong> → Bit 1 (ALTO/HIGH)<br>
+                    • <strong>Limiar: 3V</strong> → Ponto de separação digital<br><br>
+                    <strong>Este é o fundamento de toda computação digital!</strong>
                 `;
 
           finalResults.style.display = "block";
@@ -934,22 +873,19 @@
         }, 1500);
       }
 
-      // Funções globais para onclick
-      window.togglePowerBit = togglePowerBit;
-      window.showHint = showHint;
+      // Função global para os botões (necessária para onclick inline)
+      window.selectBit = selectBit;
 
-      // Dica inicial
-      document.addEventListener("DOMContentLoaded", function () {
-        setTimeout(() => {
-          if (Object.keys(userAnswers).length === 0) {
-            showFeedback(
-              "info",
-              "💡 Dica: Use o visualizador de potências de 2 para entender a conversão. Clique nos bits para experimentar!",
-              5000
-            );
-          }
-        }, 3000);
-      });
+      // Adicionar efeito de shake para respostas incorretas
+      const shakeStyle = document.createElement("style");
+      shakeStyle.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+      document.head.appendChild(shakeStyle);
     </script>
   </body>
 </html>
