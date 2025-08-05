@@ -625,35 +625,7 @@
             <div class="steps-title">
               📋 Etapas Disponíveis (arraste para organizar)
             </div>
-            <div class="steps-grid" id="stepsGrid">
-              <div class="step-card" data-order="5" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Ligar a cafeteira</div>
-              </div>
-              <div class="step-card" data-order="2" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Colocar água no reservatório da cafeteira</div>
-              </div>
-              <div class="step-card" data-order="3" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Colocar filtro de papel no suporte da cafeteira</div>
-              </div>
-              <div class="step-card" data-order="1" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Verificar se há pó de café disponível no armário</div>
-              </div>
-              <div class="step-card" data-order="4" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Adicionar café em pó</div>
-              </div>
-              <div class="step-card" data-order="7" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Servir o café na xícara</div>
-              </div>
-              <div class="step-card" data-order="6" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Aguardar o café ficar pronto</div>
-              </div>
+            <div class="steps-grid" id="stepsGrid">             
             </div>
           </div>
 
@@ -871,6 +843,52 @@
 
         feedback.style.display = "block";
       }
+      function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function renderShuffledSteps() {
+  const stepsGrid = document.getElementById("stepsGrid");
+  stepsGrid.innerHTML = "";
+
+  const steps = [
+    { order: 1, text: "Verificar se há pó de café disponível no armário" },
+    { order: 2, text: "Colocar água no reservatório da cafeteira" },
+    { order: 3, text: "Colocar filtro de papel no suporte da cafeteira" },
+    { order: 4, text: "Adicionar café em pó" },
+    { order: 5, text: "Ligar a cafeteira" },
+    { order: 6, text: "Aguardar o café ficar pronto" },
+    { order: 7, text: "Servir o café na xícara" },
+  ];
+
+  const shuffledSteps = shuffleArray(steps);
+
+  shuffledSteps.forEach((step) => {
+    const card = document.createElement("div");
+    card.className = "step-card";
+    card.setAttribute("data-order", step.order);
+    card.setAttribute("draggable", "true");
+    card.innerHTML = `
+      <div class="step-number">?</div>
+      <div class="step-text">${step.text}</div>
+    `;
+
+    // Adiciona eventos de drag
+    card.addEventListener("dragstart", handleDragStart);
+    card.addEventListener("dragend", handleDragEnd);
+
+    stepsGrid.appendChild(card);
+  });
+}
+
+// Embaralhar e renderizar ao carregar
+renderShuffledSteps();
+
     </script>
   </body>
 </html>
