@@ -612,55 +612,47 @@
               </div>
             </div>
             <div class="algorithm-steps" id="algorithmSteps">
-              <div class="step-placeholder">
-                Etapa 1: Arraste a primeira etapa aqui
-              </div>
-              <div class="step-placeholder">
-                Etapa 2: Arraste a segunda etapa aqui
-              </div>
-              <div class="step-placeholder">
-                Etapa 3: Arraste a terceira etapa aqui
-              </div>
-              <div class="step-placeholder">
-                Etapa 4: Arraste a quarta etapa aqui
-              </div>
-              <div class="step-placeholder">
-                Etapa 5: Arraste a quinta etapa aqui
-              </div>
-              <div class="step-placeholder">
-                Etapa 6: Arraste a sexta etapa aqui
-              </div>
+              <div class="step-placeholder">Etapa 1: Arraste a primeira etapa aqui</div>
+              <div class="step-placeholder">Etapa 2: Arraste a segunda etapa aqui</div>
+              <div class="step-placeholder">Etapa 3: Arraste a terceira etapa aqui</div>
+              <div class="step-placeholder">Etapa 4: Arraste a quarta etapa aqui</div>
+              <div class="step-placeholder">Etapa 5: Arraste a quinta etapa aqui</div>
+              <div class="step-placeholder">Etapa 6: Arraste a sexta etapa aqui</div>
+              <div class="step-placeholder">Etapa 7: Arraste a sétima etapa aqui</div>
             </div>
           </div>
-
           <div class="available-steps">
             <div class="steps-title">
               📋 Etapas Disponíveis (arraste para organizar)
             </div>
             <div class="steps-grid" id="stepsGrid">
-              <div class="step-card" data-order="3" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Adicionar café em pó</div>
-              </div>
               <div class="step-card" data-order="1" draggable="true">
                 <div class="step-number">?</div>
-                <div class="step-text">Colocar filtro na cafeteira</div>
-              </div>
-              <div class="step-card" data-order="5" draggable="true">
-                <div class="step-number">?</div>
-                <div class="step-text">Aguardar o café ficar pronto</div>
+                <div class="step-text">Verificar se há pó de café disponível no armário</div>
               </div>
               <div class="step-card" data-order="2" draggable="true">
                 <div class="step-number">?</div>
-                <div class="step-text">Adicionar água na cafeteira</div>
+                <div class="step-text">Colocar água no reservatório da cafeteira</div>
               </div>
-              <div class="step-card" data-order="6" draggable="true">
+              <div class="step-card" data-order="3" draggable="true">
                 <div class="step-number">?</div>
-                <div class="step-text">Servir o café na xícara</div>
+                <div class="step-text">Colocar filtro de papel no suporte da cafeteira</div>
               </div>
               <div class="step-card" data-order="4" draggable="true">
                 <div class="step-number">?</div>
+                <div class="step-text">Adicionar café em pó</div>
+              </div>
+              <div class="step-card" data-order="5" draggable="true">
+                <div class="step-number">?</div>
                 <div class="step-text">Ligar a cafeteira</div>
+              </div>
+              <div class="step-card" data-order="6" draggable="true">
+                <div class="step-number">?</div>
+                <div class="step-text">Aguardar o café ficar pronto</div>
+              </div>
+              <div class="step-card" data-order="7" draggable="true">
+                <div class="step-number">?</div>
+                <div class="step-text">Servir o café na xícara</div>
               </div>
             </div>
           </div>
@@ -715,7 +707,7 @@
     <script>
       let draggedElement = null;
       let placedSteps = [];
-      const correctOrder = [1, 2, 3, 4, 5, 6];
+      const correctOrder = [1, 2, 3, 4, 5, 6, 7];
 
       // Configurar drag and drop
       document.querySelectorAll(".step-card").forEach((step) => {
@@ -862,11 +854,11 @@
         if (isCorrect) {
           feedback.className = "feedback success";
           feedback.innerHTML = `
-        <div>🎯 <strong>Sequência Correta!</strong> Parabéns, você organizou o algoritmo corretamente.</div>
-        <div class="final-algorithm">
-            Etapas do algoritmo: Verificar café → Colocar filtro → Adicionar água → Ligar cafeteira → Aguardar → Servir
-        </div>
-    `;
+  <div>🎯 <strong>Sequência Correta!</strong> Parabéns, você organizou o algoritmo corretamente.</div>
+  <div class="final-algorithm">
+    Etapas do algoritmo: Verificar pó de café → Colocar água → Colocar filtro → Adicionar café → Ligar cafeteira → Aguardar → Servir
+  </div>
+`;
           document.getElementById("completionBadge").style.display = "block";
           document.getElementById("finishBtn").style.display = "inline-block";
         } else {
