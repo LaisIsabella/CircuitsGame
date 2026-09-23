@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro Raiders - Caça ao Erro Binário</title>
+
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a0d1a 50%,
+          #0d0d0d 100%
+        );
+        color: #f2f2f2;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Mesmo fundo de circuitos */
+      .circuit-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 120%;
+        height: 120%;
+        opacity: 0.06;
+        z-index: -1;
+        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='circuit-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff0077'/%3E%3Cstop offset='50%25' style='stop-color:%236600cc'/%3E%3Cstop offset='100%25' style='stop-color:%23ff0077'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg stroke='url(%23circuit-grad)' stroke-width='1' fill='none'%3E%3Cpath d='M20,20 L80,20 L80,60 L140,60 L140,100'/%3E%3Cpath d='M20,80 L60,80 L60,120 L120,120 L120,180'/%3E%3Cpath d='M180,20 L120,20 L120,40 L60,40 L60,80'/%3E%3Cpath d='M180,80 L140,80 L140,140 L80,140 L80,180'/%3E%3Cpath d='M20,160 L80,160 L80,120 L140,120'/%3E%3Cpath d='M160,160 L120,160 L120,100 L80,100'/%3E%3Cpath d='M180,140 L160,140 L160,180'/%3E%3Cpath d='M40,180 L40,140 L20,140'/%3E%3C/g%3E%3Cg fill='url(%23circuit-grad)'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='80' cy='20' r='2'/%3E%3Ccircle cx='80' cy='60' r='2'/%3E%3Ccircle cx='140' cy='60' r='2'/%3E%3Ccircle cx='140' cy='100' r='2'/%3E%3Ccircle cx='20' cy='80' r='2'/%3E%3Ccircle cx='60' cy='80' r='2'/%3E%3Ccircle cx='60' cy='120' r='2'/%3E%3Ccircle cx='120' cy='120' r='2'/%3E%3Ccircle cx='120' cy='180' r='2'/%3E%3Ccircle cx='180' cy='20' r='2'/%3E%3Ccircle cx='120' cy='20' r='2'/%3E%3Ccircle cx='120' cy='40' r='2'/%3E%3Ccircle cx='60' cy='40' r='2'/%3E%3Ccircle cx='180' cy='80' r='2'/%3E%3Ccircle cx='140' cy='80' r='2'/%3E%3Ccircle cx='140' cy='140' r='2'/%3E%3Ccircle cx='80' cy='140' r='2'/%3E%3Ccircle cx='80' cy='180' r='2'/%3E%3Ccircle cx='20' cy='160' r='2'/%3E%3Ccircle cx='80' cy='160' r='2'/%3E%3Ccircle cx='160' cy='160' r='2'/%3E%3Ccircle cx='120' cy='160' r='2'/%3E%3Ccircle cx='80' cy='100' r='2'/%3E%3Ccircle cx='180' cy='140' r='2'/%3E%3Ccircle cx='160' cy='140' r='2'/%3E%3Ccircle cx='160' cy='180' r='2'/%3E%3Ccircle cx='40' cy='180' r='2'/%3E%3Ccircle cx='40' cy='140' r='2'/%3E%3Ccircle cx='20' cy='140' r='2'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 400px 400px;
+        animation: circuit-flow 60s linear infinite;
+      }
+
+      @keyframes circuit-flow {
+        0% {
+          transform: translate(0, 0) rotate(0deg);
+          opacity: 0.06;
+        }
+        25% {
+          opacity: 0.08;
+        }
+        50% {
+          transform: translate(-100px, -100px) rotate(180deg);
+          opacity: 0.06;
+        }
+        75% {
+          opacity: 0.04;
+        }
+        100% {
+          transform: translate(0, 0) rotate(360deg);
+          opacity: 0.06;
+        }
+      }
+
+      /* Container principal */
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Header da fase */
+      .phase-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fade-in-down 1s ease-out;
+      }
+
+      .logo {
+        font-family: "Orbitron", monospace;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #ff0077;
+        text-shadow: 0 0 20px rgba(255, 0, 119, 0.8);
+        margin-bottom: 0.5rem;
+      }
+
+      .phase-title {
+        font-size: 1.8rem;
+        color: #d8b4f8;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .phase-description {
+        font-size: 1rem;
+        color: #e0e0e0;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* Card do jogo */
+      .game-card {
+        background: rgba(0, 0, 0, 0.85);
+        border: 3px solid #ff0077;
+        border-radius: 25px;
+        padding: 3rem;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 0 60px rgba(255, 0, 119, 0.4),
+          inset 0 0 60px rgba(255, 0, 119, 0.15);
+        animation: fade-in-up 1s ease-out 0.5s both;
+        position: relative;
+      }
+
+      /* Status do progresso */
+      .progress-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 0, 119, 0.3);
+      }
+
+      .progress-info {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ff0077;
+      }
+
+      .score-info {
+        font-size: 1rem;
+        color: #d8b4f8;
+      }
+
+      /* Card da rodada atual */
+      .binary-converter {
+        background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+      }
+
+      .binary-converter.completed {
+        border-color: #4caf50;
+        background: linear-gradient(145deg, #1a2a1a, #2a3a2a);
+      }
+
+      .binary-converter.incorrect {
+        border-color: #f44336;
+        background: linear-gradient(145deg, #2a1a1a, #3a2a2a);
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        75% {
+          transform: translateX(10px);
+        }
+      }
+
+      /* Texto de contexto (narrativa do João) */
+      .context-text {
+        text-align: center;
+        font-size: 1.05rem;
+        color: #e0e0e0;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+
+      .context-text strong {
+        color: #2196f3;
+      }
+
+      /* Caixa de decomposição, estilo "aula" */
+      .decomposition-box {
+        background: rgba(0, 0, 0, 0.4);
+        border: 2px solid rgba(255, 193, 7, 0.4);
+        border-radius: 15px;
+        padding: 1.5rem 2rem;
+        margin: 0 auto 1.5rem;
+        max-width: 480px;
+        font-family: "Orbitron", monospace;
+      }
+
+      .decomp-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.4rem 0;
+        font-size: 1.05rem;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .decomp-row:last-of-type {
+        border-bottom: none;
+      }
+
+      .decomp-formula {
+        color: #e0e0e0;
+        white-space: nowrap;
+      }
+
+      .decomp-formula .bit {
+        color: #ff0077;
+        font-weight: 900;
+      }
+
+      .decomp-weight-tag {
+        color: #ffc107;
+        font-size: 0.85rem;
+        font-family: "Inter", sans-serif;
+        white-space: nowrap;
+      }
+
+      .decomp-row.reveal-error {
+        background: rgba(244, 67, 54, 0.15);
+        border-radius: 8px;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+
+      .decomp-row.reveal-error .decomp-formula {
+        color: #f44336;
+      }
+
+      .decomp-summary {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px solid rgba(255, 193, 7, 0.3);
+        text-align: right;
+        font-size: 1.15rem;
+        color: #e0e0e0;
+      }
+
+      .decomp-summary .decimal-line {
+        color: #2196f3;
+        font-weight: 700;
+      }
+
+      .decomp-summary .binary-line {
+        color: #4caf50;
+        font-weight: 900;
+        letter-spacing: 0.1rem;
+      }
+
+      .decomp-note {
+        font-family: "Inter", sans-serif;
+        font-size: 0.85rem;
+        color: #ffc107;
+        font-weight: 400;
+      }
+
+      /* Pergunta principal */
+      .main-question {
+        text-align: center;
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #d8b4f8;
+        margin-bottom: 1.2rem;
+      }
+
+      /* Área de julgamento */
+      .judge-area {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .judge-btn {
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 180px;
+      }
+
+      .judge-btn.correct-btn {
+        background: rgba(76, 175, 80, 0.15);
+        border: 2px solid #4caf50;
+        color: #4caf50;
+      }
+
+      .judge-btn.correct-btn:hover {
+        background: rgba(76, 175, 80, 0.3);
+        transform: translateY(-3px);
+      }
+
+      .judge-btn.wrong-btn {
+        background: rgba(244, 67, 54, 0.15);
+        border: 2px solid #f44336;
+        color: #f44336;
+      }
+
+      .judge-btn.wrong-btn:hover {
+        background: rgba(244, 67, 54, 0.3);
+        transform: translateY(-3px);
+      }
+
+      .judge-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none !important;
+      }
+
+      /* Pergunta de causa (múltipla escolha) */
+      .cause-question {
+        text-align: center;
+        margin-top: 1rem;
+      }
+
+      .cause-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #2196f3;
+        margin-bottom: 1.2rem;
+      }
+
+      .cause-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .cause-option {
+        background: rgba(33, 150, 243, 0.08);
+        border: 2px solid rgba(33, 150, 243, 0.4);
+        color: #e0e0e0;
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        font-size: 1rem;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .cause-option:hover:not(:disabled) {
+        background: rgba(33, 150, 243, 0.2);
+        border-color: #2196f3;
+        transform: translateY(-2px);
+      }
+
+      .cause-option.selected-correct {
+        background: rgba(76, 175, 80, 0.2);
+        border-color: #4caf50;
+        color: #4caf50;
+      }
+
+      .cause-option.selected-wrong {
+        background: rgba(244, 67, 54, 0.2);
+        border-color: #f44336;
+        color: #f44336;
+      }
+
+      .cause-option:disabled {
+        cursor: not-allowed;
+      }
+
+      /* Botões de ação */
+      .game-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .btn {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, #ff0077, #cc0066);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 0, 119, 0.4);
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 0, 119, 0.6);
+      }
+
+      /* Feedback */
+      .feedback {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+        animation: fade-in 0.5s ease-out;
+      }
+
+      .feedback.success {
+        background: rgba(76, 175, 80, 0.1);
+        border: 2px solid #4caf50;
+        color: #4caf50;
+      }
+
+      .feedback.error {
+        background: rgba(244, 67, 54, 0.1);
+        border: 2px solid #f44336;
+        color: #f44336;
+      }
+
+      .feedback.info {
+        background: rgba(33, 150, 243, 0.1);
+        border: 2px solid #2196f3;
+        color: #2196f3;
+      }
+
+      /* Resultados finais */
+      .final-results {
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        border-radius: 20px;
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .final-score {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #ff0077;
+        margin-bottom: 1rem;
+      }
+
+      .final-message {
+        font-size: 1.1rem;
+        color: #e0e0e0;
+        line-height: 1.6;
+      }
+
+      /* Navegação */
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+        animation: fade-in 1s ease-out 1s both;
+      }
+
+      .nav-btn {
+        padding: 0.8rem 1.5rem;
+        background: rgba(255, 0, 119, 0.1);
+        border: 2px solid #ff0077;
+        color: #ff0077;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 0, 119, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* Animações */
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .game-card {
+          padding: 2rem;
+        }
+
+        .binary-converter {
+          padding: 1.5rem;
+        }
+
+        .judge-area {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .judge-btn {
+          width: 100%;
+          max-width: 280px;
+        }
+
+        .decomposition-box {
+          padding: 1.2rem 1rem;
+        }
+
+        .decomp-row {
+          font-size: 0.9rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.2rem;
+        }
+
+        .navigation {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="circuit-bg"></div>
+
+    <div class="container">
+      <header class="phase-header">
+        <h1 class="logo">🕹️ RETRO RAIDERS</h1>
+        <h2 class="phase-title">🐞 Caça ao Erro Binário</h2>
+        <p class="phase-description">
+          Acompanhe como o João converteu cada número decimal para binário e
+          confira a decomposição dele com atenção — nem sempre ele acerta!
+        </p>
+      </header>
+
+      <div class="game-card">
+        <div class="progress-status">
+          <div class="progress-info">
+            Conversões: <span id="completedCount">0</span> de
+            <span id="totalRounds">6</span>
+          </div>
+          <div class="score-info">
+            Acertos: <span id="correctCount">0</span>
+          </div>
+        </div>
+
+        <div class="binary-converter" id="roundCard">
+          <!-- Rodada atual será inserida aqui -->
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="final-results" id="finalResults">
+          <div class="final-score" id="finalScore">6/6</div>
+          <div class="final-message" id="finalMessage">
+            <!-- Mensagem final -->
+          </div>
+        </div>
+      </div>
+
+      <nav class="navigation">
+        <a href="./binario.html" class="nav-btn">← Fase Anterior</a>
+        <a href="./index.html" class="nav-btn">Voltar ao Menu</a>
+      </nav>
+    </div>
+
+    <script>
+      const rounds = [
+        {
+          decimal: 6,
+          bits: [
+            { bit: 0, power: 3 },
+            { bit: 1, power: 2 },
+            { bit: 1, power: 1 },
+            { bit: 0, power: 0 },
+          ],
+          binaryLabel: "0110",
+          decimalComputed: 6,
+          decimalNote: null,
+          isCorrect: true,
+          errorRowIndices: [],
+        },
+        {
+          decimal: 10,
+          bits: [
+            { bit: 1, power: 3 },
+            { bit: 0, power: 2 },
+            { bit: 1, power: 1 },
+            { bit: 1, power: 0 },
+          ],
+          binaryLabel: "1011",
+          decimalComputed: 11,
+          decimalNote: "(mas o João queria converter o 10)",
+          isCorrect: false,
+          errorRowIndices: [3],
+          causeOptions: [
+            "Ele somou o peso 1 (2⁰), que não deveria entrar nessa conta",
+            "Ele esqueceu de somar o peso 4 (2²)",
+            "Ele trocou o peso 2 pelo peso 8",
+          ],
+          causeCorrectIndex: 0,
+        },
+        {
+          decimal: 12,
+          bits: [
+            { bit: 1, power: 3 },
+            { bit: 0, power: 2 },
+            { bit: 0, power: 1 },
+            { bit: 0, power: 0 },
+          ],
+          binaryLabel: "1000",
+          decimalComputed: 8,
+          decimalNote: null,
+          isCorrect: false,
+          errorRowIndices: [1],
+          causeOptions: [
+            "Ele esqueceu de somar o peso 4 (2²), que deveria estar na conta",
+            "Ele somou o peso 2 (2¹), que não deveria entrar",
+            "Ele trocou o peso 8 pelo peso 4",
+          ],
+          causeCorrectIndex: 0,
+        },
+        {
+          decimal: 13,
+          bits: [
+            { bit: 1, power: 3 },
+            { bit: 0, power: 2 },
+            { bit: 1, power: 1 },
+            { bit: 1, power: 0 },
+          ],
+          binaryLabel: "1011",
+          decimalComputed: 11,
+          decimalNote: null,
+          isCorrect: false,
+          errorRowIndices: [1, 2],
+          causeOptions: [
+            "Ele trocou os dígitos das posições do peso 4 (2²) e do peso 2 (2¹)",
+            "Ele esqueceu de somar o peso 8 (2³)",
+            "Ele somou o peso 1 (2⁰), que não deveria entrar",
+          ],
+          causeCorrectIndex: 0,
+        },
+      ];
+
+      let currentIndex = 0;
+      let completedCount = 0;
+      let correctCount = 0;
+      let firstTryClean = true; // sem erro nesta rodada ainda
+
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("totalRounds").textContent = rounds.length;
+        renderRound();
+      });
+
+      function shuffle(array) {
+        const copy = array.slice();
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function buildDecomposition(round, revealErrors) {
+        const rows = round.bits
+          .map((row, idx) => {
+            const value = row.bit * Math.pow(2, row.power);
+            const weight = Math.pow(2, row.power);
+            const isErrorRow =
+              revealErrors && round.errorRowIndices.includes(idx);
+            return `
+              <div class="decomp-row${isErrorRow ? " reveal-error" : ""}">
+                <span class="decomp-formula">
+                  <span class="bit">${row.bit}</span> x 2<sup>${
+              row.power
+            }</sup> = ${value}
+                </span>
+                <span class="decomp-weight-tag">→ tem peso ${weight}</span>
+              </div>
+            `;
+          })
+          .join("");
+
+        return `
+          <div class="decomposition-box">
+            ${rows}
+            <div class="decomp-summary">
+              <div class="decimal-line">decimal: ${round.decimalComputed}${
+          round.decimalNote
+            ? ` <span class="decomp-note">${round.decimalNote}</span>`
+            : ""
+        }</div>
+              <div class="binary-line">binário: ${round.binaryLabel}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderRound() {
+        firstTryClean = true;
+        const round = rounds[currentIndex];
+        const card = document.getElementById("roundCard");
+        card.className = "binary-converter";
+
+        card.innerHTML = `
+          <div class="context-text">
+            João tentou converter o número <strong>${round.decimal}</strong>
+            para binário. Veja como ele fez:
+          </div>
+          ${buildDecomposition(round, false)}
+          <div class="main-question">
+            Observando como o João fez essa decomposição, o raciocínio dele
+            está certo?
+          </div>
+          <div class="judge-area" id="judgeArea">
+            <button class="judge-btn correct-btn" id="judgeCorrectBtn">✅ Sim, está certo</button>
+            <button class="judge-btn wrong-btn" id="judgeWrongBtn">❌ Não, tem um erro</button>
+          </div>
+        `;
+
+        document.getElementById("judgeCorrectBtn").addEventListener(
+          "click",
+          function () {
+            handleJudge(true);
+          }
+        );
+        document.getElementById("judgeWrongBtn").addEventListener(
+          "click",
+          function () {
+            handleJudge(false);
+          }
+        );
+
+        document.getElementById("feedback").style.display = "none";
+      }
+
+      function handleJudge(saidCorrect) {
+        const round = rounds[currentIndex];
+
+        if (saidCorrect) {
+          if (round.isCorrect) {
+            succeedRound(
+              `✅ Isso mesmo! O raciocínio do João está certo: ${round.decimal} em binário é ${round.binaryLabel}.`
+            );
+          } else {
+            firstTryClean = false;
+            shakeCard();
+            showFeedback(
+              "error",
+              "🧐 Olha com mais atenção a decomposição do João, tem algo errado ali."
+            );
+          }
+        } else {
+          if (round.isCorrect) {
+            firstTryClean = false;
+            shakeCard();
+            showFeedback(
+              "error",
+              "🤔 A decomposição do João está certa, olha de novo com calma."
+            );
+          } else {
+            renderCauseQuestion();
+          }
+        }
+      }
+
+      function shakeCard() {
+        const card = document.getElementById("roundCard");
+        card.classList.add("incorrect");
+        setTimeout(() => card.classList.remove("incorrect"), 500);
+      }
+
+      function renderCauseQuestion() {
+        const round = rounds[currentIndex];
+        const judgeArea = document.getElementById("judgeArea");
+
+        const optionsWithIndex = round.causeOptions.map((text, idx) => ({
+          text,
+          isCorrect: idx === round.causeCorrectIndex,
+        }));
+        const shuffled = shuffle(optionsWithIndex);
+
+        judgeArea.outerHTML = `
+          <div class="cause-question" id="causeQuestion">
+            <div class="cause-title">Você consegue identificar o que o João errou?</div>
+            <div class="cause-options" id="causeOptions">
+              ${shuffled
+                .map(
+                  (opt, i) =>
+                    `<button class="cause-option" data-correct="${opt.isCorrect}" data-idx="${i}">${opt.text}</button>`
+                )
+                .join("")}
+            </div>
+          </div>
+        `;
+
+        showFeedback(
+          "info",
+          "🔍 Você encontrou o erro! Agora descubra qual foi a falha do João.",
+          2500
+        );
+      }
+
+      function handleCause(button) {
+        const isCorrect = button.dataset.correct === "true";
+        const allButtons = document.querySelectorAll(".cause-option");
+
+        if (isCorrect) {
+          allButtons.forEach((b) => (b.disabled = true));
+          button.classList.add("selected-correct");
+          succeedRound("✅ Exato! Você encontrou a causa do erro do João.");
+        } else {
+          firstTryClean = false;
+          button.classList.add("selected-wrong");
+          setTimeout(() => button.classList.remove("selected-wrong"), 800);
+          showFeedback(
+            "error",
+            "❌ Não é bem essa a causa. Tente novamente."
+          );
+        }
+      }
+
+      // Delegação de evento para as opções de causa (criadas dinamicamente)
+      document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("cause-option") && !e.target.disabled) {
+          handleCause(e.target);
+        }
+      });
+
+      function succeedRound(message) {
+        completedCount++;
+        if (firstTryClean) {
+          correctCount++;
+        }
+
+        document.getElementById("completedCount").textContent =
+          completedCount;
+        document.getElementById("correctCount").textContent = correctCount;
+
+        const card = document.getElementById("roundCard");
+        card.classList.add("completed");
+
+        document.querySelectorAll(".judge-btn, .cause-option").forEach(
+          (btn) => (btn.disabled = true)
+        );
+
+        // Revelar a linha com o erro, se houver, como reforço de aprendizado
+        const round = rounds[currentIndex];
+        if (round.errorRowIndices.length > 0) {
+          const box = card.querySelector(".decomposition-box");
+          if (box) {
+            box.outerHTML = buildDecomposition(round, true);
+          }
+        }
+
+        showFeedback("success", message);
+
+        const actions = document.createElement("div");
+        actions.className = "game-actions";
+        actions.innerHTML = `<button class="btn btn-primary" id="nextRoundBtn">Próxima →</button>`;
+        card.appendChild(actions);
+
+        document
+          .getElementById("nextRoundBtn")
+          .addEventListener("click", nextRound);
+      }
+
+      function nextRound() {
+        if (currentIndex < rounds.length - 1) {
+          currentIndex++;
+          renderRound();
+        } else {
+          endGame();
+        }
+      }
+
+      function showFeedback(type, message, duration = 4000) {
+        const feedback = document.getElementById("feedback");
+        feedback.className = `feedback ${type}`;
+        feedback.textContent = message;
+        feedback.style.display = "block";
+
+        if (type === "info") {
+          setTimeout(() => {
+            feedback.style.display = "none";
+          }, duration);
+        }
+      }
+
+      function endGame() {
+        document.getElementById("roundCard").style.display = "none";
+        document.getElementById("feedback").style.display = "none";
+
+        const finalResults = document.getElementById("finalResults");
+        const finalScore = document.getElementById("finalScore");
+        const finalMessage = document.getElementById("finalMessage");
+
+        const percentage = Math.round(
+          (correctCount / rounds.length) * 100
+        );
+        finalScore.textContent = `${correctCount}/${rounds.length} (${percentage}%)`;
+
+        let messageIntro;
+        if (correctCount === rounds.length) {
+          messageIntro =
+            "🎉 <strong>Caçador de bugs nível expert!</strong> Você identificou toda decomposição certa, errada e sua causa de primeira!";
+        } else if (correctCount >= rounds.length - 2) {
+          messageIntro =
+            "👏 <strong>Muito bem!</strong> Você já reconhece bem os erros mais comuns na conversão binária.";
+        } else {
+          messageIntro =
+            "💪 <strong>Bom esforço!</strong> Revise os pesos das potências de 2 e continue praticando.";
+        }
+
+        finalMessage.innerHTML = `
+          ${messageIntro}<br><br>
+          <em>Erros comuns na conversão binária:</em><br>
+          • Esquecer de somar um peso (potência de 2)<br>
+          • Somar um peso que não deveria entrar<br>
+          • Usar o peso errado numa posição<br>
+          • Trocar a ordem dos dígitos<br><br>
+          <strong>A atenção aos detalhes é essencial na computação!</strong>
+        `;
+
+        finalResults.style.display = "block";
+      }
+    </script>
+  </body>
+</html>
